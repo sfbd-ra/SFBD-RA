@@ -31,18 +31,6 @@
       <li><a href="#results">Results</a></li>
     </ul>
   </div>
-
-  <div class="wide demo" aria-labelledby="demo-caption">
-    <svg id="denoise-svg" viewBox="0 0 900 340" role="img" aria-label="Illustration of noisy action trajectories becoming smooth over denoising iterations"></svg>
-    <div class="demo-controls">
-      <label for="iter">Iteration
-        <input type="range" id="iter" min="0" max="4" step="0.01" value="0">
-        <output id="iter-out" for="iter">k = 0, noisy data</output>
-      </label>
-      <button type="button" id="replay">Replay</button>
-    </div>
-    <p class="note" id="demo-caption">Schematic only, not experimental data. Each pass of backward sampling and denoiser updating moves the demonstration actions closer to the clean distribution.</p>
-  </div>
 </header>
 
 <main>
