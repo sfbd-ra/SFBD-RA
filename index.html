@@ -94,18 +94,24 @@
     <div class="wrap">
       <h2>1. How SFBD-RA works</h2>
       <p>SFBD-RA adapts stochastic forward-backward deconvolution from image generation to robot actions. The denoising target changes from pixels to actions, conditioned on the observation; the rest of the pipeline stays the same.</p>
+      <!-- Step 1, then steps 2-3 inside .loop-group, which draws the loop arrow -->
       <ol class="steps">
-        <li>
+        <li class="step">
           <strong>Pretrain on a small clean set</strong>
           Train the denoiser on 2–10% clean demonstrations, so it starts close to the true action distribution instead of from random weights.
         </li>
-        <li class="loop">
-          <strong>Backward sampling</strong>
-          Use the current denoiser to denoise the actions in the noisy demonstrations, given their observations.
-        </li>
-        <li class="loop">
-          <strong>Denoiser update</strong>
-          Fine-tune the denoiser on the denoised dataset. <span class="loop-note">Repeat steps 2 and 3 for K iterations.</span>
+        <li class="loop-group">
+          <ol class="loop-steps">
+            <li class="step loop">
+              <strong>Backward sampling</strong>
+              Use the current denoiser to denoise the actions in the noisy demonstrations, given their observations.
+            </li>
+            <li class="step loop">
+              <strong>Denoiser update</strong>
+              Fine-tune the denoiser on the denoised dataset.
+            </li>
+          </ol>
+          <span class="loop-label">Repeat <b>K</b> times</span>
         </li>
       </ol>
       <p>Under idealized assumptions (only actions are corrupted, by known Gaussian noise; the noisy dataset is unlimited; the training data cover the observations the expert visits), the KL divergence between the true action distribution and the model's distribution does not increase from one iteration to the next. The proof, for single-step actions, is in the paper's appendix.</p>
