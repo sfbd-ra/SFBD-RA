@@ -38,3 +38,35 @@ document.querySelectorAll('video[data-placeholder-video]').forEach(function (v) 
 //   K   number of iterations shown on the slider
 //   N   number of trajectories
 //   amp (inside draw) how noisy the trajectories start
+
+// ---- Part 3 -----------------------------------------------------------
+// Top bar: "Menu" button on small screens, highlight the section in view,
+// and the thin reading-progress line under the bar.
+var nav = document.querySelector('.site-nav');
+var toggle = document.querySelector('.nav-toggle');
+toggle.addEventListener('click', function () {
+  var open = nav.classList.toggle('open');
+  toggle.setAttribute('aria-expanded', open);
+});
+nav.querySelectorAll('a').forEach(function (a) {
+  a.addEventListener('click', function () {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', false);
+  });
+});
+
+var navLinks = Array.prototype.slice.call(nav.querySelectorAll('a'));
+var progress = document.querySelector('.read-progress span');
+function onScroll() {
+  var doc = document.documentElement;
+  var max = doc.scrollHeight - doc.clientHeight;
+  progress.style.width = (max > 0 ? (doc.scrollTop / max) * 100 : 0) + '%';
+  var current = null;
+  navLinks.forEach(function (a) {
+    var sec = document.querySelector(a.getAttribute('href'));
+    if (sec && sec.getBoundingClientRect().top <= 100) current = a;
+  });
+  navLinks.forEach(function (a) { a.classList.toggle('active', a === current); });
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();

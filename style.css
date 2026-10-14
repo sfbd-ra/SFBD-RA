@@ -90,7 +90,7 @@ h1 {
   text-wrap: balance;
 }
 h1 span { display: block; margin-top: 0.2em; font-weight: 400; }
-.status { margin: 20px 0 0; color: #303943; font-size: 1.14rem; }
+.status { margin: 16px 0 0; color: #303943; font-size: 1.14rem; }
 .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
 .pill {
   display: inline-flex;
@@ -146,8 +146,7 @@ h1 span { display: block; margin-top: 0.2em; font-weight: 400; }
 section[data-section] { padding: 72px 0; }
 section.soft { background: var(--bg-soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 h2 { margin: 0 0 14px; font-size: 2rem; line-height: 1.14; font-weight: 760; text-align: center; }
-h2 + p { font-size: 1.1rem; line-height: 1.62; text-align: center; color: #303943; }   /* lead paragraph */
-#abstract p { text-align: left; }   /* long text reads better left-aligned */
+h2 + p { font-size: 1.1rem; line-height: 1.62; color: #303943; }   /* lead paragraph; long text reads better left-aligned */
 h3 { font-size: 1.2rem; margin: 2rem 0 0.6rem; font-weight: 700; }
 p { margin: 0 0 1rem; }
 

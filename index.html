@@ -18,8 +18,8 @@
 </head>
 
 <body>
-<!-- ============ TOP BAR: title, subtitle, link buttons, animation ============ -->
-  <header class="topbar">
+<!-- ============ TOP BAR: sticky navigation ============ -->
+<header class="topbar">
   <a class="brand" href="#top">SFBD-RA</a>
   <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
   <nav class="site-nav" aria-label="Main navigation">
@@ -32,47 +32,33 @@
   <div class="read-progress" aria-hidden="true"><span></span></div>
 </header>
 
-<!-- ============ HEADER: title, subtitle, link buttons, animation ============ -->
-<header>
-  <div class="wrap">
+<!-- ============ HERO: title, subtitle, link buttons ============ -->
+<header class="hero" id="top">
+  <div class="wide">
     <h1>Stochastic Forward-Backward Deconvolution for Robotics Action (SFBD-RA)</h1>
-    <p class="subtitle">Training diffusion policy from noisy demonstrations, with as little as 2% of them clean.</p>
+    <p class="status">Training diffusion policy from noisy demonstrations, with as little as 2% of them clean.</p>
     <p class="status">Anonymous authors. Manuscript under review.</p>
-    <ul class="links">
-      <li><span title="The paper will be linked after the review process">Paper (under review)</span></li>
+    <nav class="links" aria-label="Paper links">
+      <span class="pill disabled" title="The paper will be linked after the review process">Paper (under review)</span>
       <!-- Replace with an anonymized code link, e.g. https://anonymous.4open.science/r/your-repo -->
-      <li><a href="#code">Code</a></li>
-      <li><a href="#video">Video</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
+      <a class="pill" href="#code">Code</a>
+      <a class="pill" href="#video">Video</a>
+      <a class="pill" href="#results">Results</a>
+    </nav>
   </div>
 </header>
 
 <main>
   <!-- ============ ABSTRACT: paste from your paper ============ -->
-  <section id="abstract">
+  <section id="abstract" data-section>
     <div class="wrap">
       <h2>Abstract</h2>
       <p>Diffusion policy is a state-of-the-art approach for robot action generation conditioned on observations. However, to train the policy, existing methods typically assume access to clean expert demonstrations, which limits their applicability when clean expert data are scarce. To overcome this limitation, we adapt a deconvolution-based method from the image generation domain to robotic policy learning. The resulting framework achieves performance comparable to a model trained on an entirely clean dataset, while requiring as little as 2% of the demonstrations to be clean. We further demonstrate that clean demonstrations from related tasks can be leveraged through transfer learning to improve performance on the target task. The proposed approach is validated in both simulations and real-world experiments, where it achieves success rates and completion time comparable to the clean expert data baseline.</p>
     </div>
   </section>
 
-  <section id="video">
-    <div class="wrap">
-      <h2></h2>
-      <p></p>
-      <figure class="video-frame">
-        <!-- Self-hosted video: no channel name or uploader attached. -->
-        <video controls preload="metadata" playsinline data-placeholder-video>
-          <source src="Assets/supplementary_video.mp4" type="video/mp4">
-        </video>
-        <figcaption></figcaption>
-      </figure>
-    </div>
-  </section>
-
   <!-- ============ METHOD: the three steps of SFBD-RA ============ -->
-  <section id="method">
+  <section id="method" class="soft" data-section>
     <div class="wrap">
       <h2>How SFBD-RA works</h2>
       <p>SFBD-RA adapts stochastic forward-backward deconvolution from image generation to robot actions. The denoising target changes from pixels to actions, conditioned on the observation; the rest of the pipeline stays the same.</p>
@@ -95,7 +81,7 @@
   </section>
 
   <!-- ============ SIMULATION RESULTS: figures + first table ============ -->
-  <section id="results">
+  <section id="results" data-section>
     <div class="wrap">
       <h2>Simulation results</h2>
       <p>We evaluate on three tasks from the D3IL benchmark in MuJoCo: avoiding, pushing and aligning. Results are averaged over six seeds.</p>
@@ -167,7 +153,7 @@
   </section>
 
   <!-- ============ REAL ROBOT: setup photo, video, robot table ============ -->
-  <section id="real-robot">
+  <section id="real-robot" class="soft" data-section>
     <div class="wrap">
       <h2>Real-robot experiments</h2>
       <p>A Franka Emika Panda pushes a 3D-printed box with markers on each side to a target pose, tracked by an external camera. Each policy is tested on 10 random start and target poses, twice each, for 20 episodes per policy. SFBD-RA beats the policy trained directly on noisy data in success rate and pose error at both noise levels, even with only 2% clean demonstrations.</p>
@@ -221,7 +207,7 @@
   </section>
 
   <!-- ============ ABLATION: dataset-size table ============ -->
-  <section id="ablation">
+  <section id="ablation" data-section>
     <div class="wrap">
       <h2>Sensitivity to dataset size</h2>
       <p>The 1000 human demonstrations for aligning are split into a consistent cluster (638) and an inconsistent cluster (362). Starting from all inconsistent demonstrations, we add consistent ones to reach 600 and 800 in total. SFBD-RA improves the success rate at every size.</p>
@@ -268,7 +254,7 @@
   </section>
 
   <!-- ============ CODE AND CITATION: add your anonymous code link here ============ -->
-  <section id="code">
+  <section id="code" class="soft" data-section>
     <div class="wrap">
       <h2>Code and citation</h2>
       <p>Code is available through an anonymized repository: <a href="#" id="code-link">link to be added</a>.</p>
