@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stochastic Forward-Backward Deconvolution for Robotics: Training Diffusion Policy from Noisy Demonstrations</title>
+<meta name="description" content="Training diffusion policies from noisy demonstrations with as little as 2% clean data.">
+<!-- Keeps the page out of search engines while under review. Remove after acceptance. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M3 24 C10 24 12 8 29 8' fill='none' stroke='%232e8b57' stroke-width='4' stroke-linecap='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<!-- All styling lives in style.css -->
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ HEADER: title, subtitle, link buttons, animation ============ -->
+<header>
+  <div class="wrap">
+    <h1>Stochastic Forward-Backward Deconvolution for Robotics</h1>
+    <p class="subtitle">Training diffusion policy from noisy demonstrations, with as little as 2% of them clean.</p>
+    <p class="status">Anonymous authors. Manuscript under review.</p>
+    <ul class="links">
+      <li><span title="The paper will be linked after the review process">Paper (under review)</span></li>
+      <!-- Replace with an anonymized code link, e.g. https://anonymous.4open.science/r/your-repo -->
+      <li><a href="#code">Code</a></li>
+      <li><a href="#video">Video</a></li>
+      <li><a href="#results">Results</a></li>
+    </ul>
+  </div>
+
+  <div class="wide demo" aria-labelledby="demo-caption">
+    <svg id="denoise-svg" viewBox="0 0 900 340" role="img" aria-label="Illustration of noisy action trajectories becoming smooth over denoising iterations"></svg>
+    <div class="demo-controls">
+      <label for="iter">Iteration
+        <input type="range" id="iter" min="0" max="4" step="0.01" value="0">
+        <output id="iter-out" for="iter">k = 0, noisy data</output>
+      </label>
+      <button type="button" id="replay">Replay</button>
+    </div>
+    <p class="note" id="demo-caption">Schematic only, not experimental data. Each pass of backward sampling and denoiser updating moves the demonstration actions closer to the clean distribution.</p>
+  </div>
+</header>
+
+<main>
+  <!-- ============ ABSTRACT: paste from your paper ============ -->
+  <section id="abstract">
+    <div class="wrap">
+      <h2>Abstract</h2>
+      <p>Diffusion policy is a state-of-the-art approach for robot action generation conditioned on observations. However, to train the policy, existing methods typically assume access to clean expert demonstrations, which limits their applicability when clean expert data are scarce. To overcome this limitation, we adapt a deconvolution-based method from the image generation domain to robotic policy learning. The resulting framework achieves performance comparable to a model trained on an entirely clean dataset, while requiring as little as 2% of the demonstrations to be clean. We further demonstrate that clean demonstrations from related tasks can be leveraged through transfer learning to improve performance on the target task. The proposed approach is validated in both simulations and real-world experiments, where it achieves success rates and completion time comparable to the clean expert data baseline.</p>
+    </div>
+  </section>
+
+  <!-- ============ METHOD: the three steps of SFBD-RA ============ -->
+  <section id="method">
+    <div class="wrap">
+      <h2>How SFBD-RA works</h2>
+      <p>SFBD-RA adapts stochastic forward-backward deconvolution from image generation to robot actions. The denoising target changes from pixels to actions, conditioned on the observation; the rest of the pipeline stays the same.</p>
+      <ol class="steps">
+        <li>
+          <strong>Pretrain on a small clean set</strong>
+          Train the denoiser on 2–10% clean demonstrations, so it starts close to the true action distribution instead of from random weights.
+        </li>
+        <li class="loop">
+          <strong>Backward sampling</strong>
+          Use the current denoiser to denoise the actions in the noisy demonstrations, given their observations.
+        </li>
+        <li class="loop">
+          <strong>Denoiser update</strong>
+          Fine-tune the denoiser on the denoised dataset. <span class="loop-note">Repeat steps 2 and 3 for K iterations.</span>
+        </li>
+      </ol>
+      <p>Under idealized assumptions (only actions are corrupted, by known Gaussian noise; the noisy dataset is unlimited; the training data cover the observations the expert visits), the KL divergence between the true action distribution and the model's distribution does not increase from one iteration to the next. The proof, for single-step actions, is in the paper's appendix.</p>
+    </div>
+  </section>
+
+  <!-- ============ SIMULATION RESULTS: figures + first table ============ -->
+  <section id="results">
+    <div class="wrap">
+      <h2>Simulation results</h2>
+      <p>We evaluate on three tasks from the D3IL benchmark in MuJoCo: avoiding, pushing and aligning. Results are averaged over six seeds.</p>
+
+      <figure>
+        <img src="Assets/aligning_task.png" alt="The aligning task in MuJoCo simulation" loading="lazy" data-placeholder>
+        <figcaption>The aligning task in MuJoCo simulation.</figcaption>
+      </figure>
+
+      <h3>Synthetic noise on the aligning task</h3>
+      <p>Gaussian noise is injected into the actions at two levels. SFBD-RA needs two to four iterations to reach a success rate and pose error comparable to the clean baseline.</p>
+      <div class="legend" aria-hidden="true">
+        <span><i style="background:var(--ours)"></i>SFBD-RA</span>
+        <span><i style="background:var(--clean)"></i>Clean baseline</span>
+        <span><i style="background:var(--noisy)"></i>Noisy baseline</span>
+      </div>
+      <figure>
+        <img src="Assets/results_sigma_0.002.png" alt="Results across iterations for noise level sigma 0.002" loading="lazy" data-placeholder>
+        <figcaption>Noise level σ = 0.002.</figcaption>
+      </figure>
+      <figure>
+        <img src="Assets/results_sigma_0.004.png" alt="Results across iterations for noise level sigma 0.004" loading="lazy" data-placeholder>
+        <figcaption>Noise level σ = 0.004.</figcaption>
+      </figure>
+
+      <h3>Human demonstrations and transfer learning</h3>
+      <p>The original D3IL human demonstrations vary in quality, so we treat them as containing real-world noise. Clustering by path length, jerk and curvature separates a consistent set, from which 10% is sampled as the clean set.</p>
+    </div>
+
+    <div class="wide">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Simulation results with human demonstrations">
+        <table>
+          <caption>Human demonstrations for three tasks. In the transfer column, the aligning policy is pretrained on clean demonstrations from the avoiding task.</caption>
+          <thead>
+            <tr>
+              <th rowspan="2" scope="col">Metric</th>
+              <th colspan="2" class="group-start" scope="colgroup">Avoiding</th>
+              <th colspan="2" class="group-start" scope="colgroup">Pushing</th>
+              <th colspan="3" class="group-start" scope="colgroup">Aligning</th>
+            </tr>
+            <tr>
+              <th class="group-start">Base</th><th class="ours">SFBD-RA</th>
+              <th class="group-start">Base</th><th class="ours">SFBD-RA</th>
+              <th class="group-start">Base</th><th class="ours">SFBD-RA</th><th class="ours">Transfer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">SR (%)</th>
+              <td class="group-start">63.25 ± 0.5</td><td class="ours">78 ± 2.76</td>
+              <td class="group-start">49.8 ± 4.50</td><td class="ours">63.60 ± 8.96</td>
+              <td class="group-start">87 ± 3.03</td><td class="ours">84 ± 1.6</td><td class="ours">79.4 ± 3.44</td></tr>
+            <tr><th scope="row">Error</th>
+              <td class="group-start">N/A</td><td class="ours">N/A</td>
+              <td class="group-start">0.13 ± 0.01</td><td class="ours">0.09 ± 0.02</td>
+              <td class="group-start">0.06 ± 0.01</td><td class="ours">0.07 ± 0.01</td><td class="ours">0.09 ± 0.01</td></tr>
+            <tr><th scope="row">Ent.</th>
+              <td class="group-start">0.88 ± 0.02</td><td class="ours">0.69 ± 0.01</td>
+              <td class="group-start">0.33 ± 0.05</td><td class="ours">0.44 ± 0.07</td>
+              <td class="group-start">0.34 ± 0.06</td><td class="ours">0.28 ± 0.05</td><td class="ours">0.09 ± 0.05</td></tr>
+            <tr><th scope="row">Time (frames)</th>
+              <td class="group-start">66.4 ± 0.51</td><td class="ours">63.43 ± 0.33</td>
+              <td class="group-start">249 ± 2.75</td><td class="ours">249.31 ± 6.62</td>
+              <td class="group-start">171.43 ± 4.46</td><td class="ours">170.19 ± 5.09</td><td class="ours">187.11 ± 5.93</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="metrics">SR: success rate. Error: final pose error. Ent.: behavior entropy, the diversity of strategies. Time: completion time.</p>
+    </div>
+  </section>
+
+  <!-- ============ REAL ROBOT: setup photo, video, robot table ============ -->
+  <section id="real-robot">
+    <div class="wrap">
+      <h2>Real-robot experiments</h2>
+      <p>A Franka Emika Panda pushes a 3D-printed box with markers on each side to a target pose, tracked by an external camera. Each policy is tested on 10 random start and target poses, twice each, for 20 episodes per policy. SFBD-RA beats the policy trained directly on noisy data in success rate and pose error at both noise levels, even with only 2% clean demonstrations.</p>
+
+      <figure>
+        <img src="Assets/experiment_setup.jpeg" alt="Physical setup: robot arm, marker box and external camera" loading="lazy" data-placeholder>
+        <figcaption>Experimental setup.</figcaption>
+      </figure>
+
+      <figure id="video" class="video-frame">
+        <!-- Self-hosted video: no channel name or uploader attached. -->
+        <video controls preload="metadata" playsinline data-placeholder-video>
+          <source src="Assets/supplementary_video.mp4" type="video/mp4">
+        </video>
+        <figcaption>Supplementary video.</figcaption>
+      </figure>
+    </div>
+
+    <div class="wide">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Real-robot results">
+        <table>
+          <caption>Real-robot results, 20 episodes per policy. SFBD-RA is pretrained on 2% or 10% clean demonstrations.</caption>
+          <thead>
+            <tr>
+              <th rowspan="2" scope="col">Metric</th>
+              <th colspan="4" class="group-start" scope="colgroup">σ = 0.002</th>
+              <th colspan="4" class="group-start" scope="colgroup">σ = 0.004</th>
+            </tr>
+            <tr>
+              <th class="group-start">Clean</th><th>Noisy</th><th class="ours">SFBD-RA 2%</th><th class="ours">SFBD-RA 10%</th>
+              <th class="group-start">Clean</th><th>Noisy</th><th class="ours">SFBD-RA 2%</th><th class="ours">SFBD-RA 10%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">SR (%)</th>
+              <td class="group-start">45</td><td>20</td><td class="ours">45</td><td class="ours">50</td>
+              <td class="group-start">25</td><td>0</td><td class="ours">20</td><td class="ours">30</td></tr>
+            <tr><th scope="row">Error</th>
+              <td class="group-start">0.53</td><td>0.57</td><td class="ours">0.39</td><td class="ours">0.26</td>
+              <td class="group-start">0.54</td><td>0.60</td><td class="ours">0.28</td><td class="ours">0.46</td></tr>
+            <tr><th scope="row">Ent.</th>
+              <td class="group-start">0.1</td><td>0.0</td><td class="ours">0.0</td><td class="ours">0.1</td>
+              <td class="group-start">0.1</td><td>0.0</td><td class="ours">0.0</td><td class="ours">0.1</td></tr>
+            <tr><th scope="row">Time (s)</th>
+              <td class="group-start">20.98</td><td>26.04</td><td class="ours">29.67</td><td class="ours">34.62</td>
+              <td class="group-start">17.98</td><td>N/A</td><td class="ours">29.68</td><td class="ours">31.72</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABLATION: dataset-size table ============ -->
+  <section id="ablation">
+    <div class="wrap">
+      <h2>Sensitivity to dataset size</h2>
+      <p>The 1000 human demonstrations for aligning are split into a consistent cluster (638) and an inconsistent cluster (362). Starting from all inconsistent demonstrations, we add consistent ones to reach 600 and 800 in total. SFBD-RA improves the success rate at every size.</p>
+    </div>
+    <div class="wide">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Ablation on dataset size">
+        <table>
+          <caption>Aligning task with human demonstrations of mixed quality and size.</caption>
+          <thead>
+            <tr>
+              <th rowspan="2" scope="col">Metric</th>
+              <th rowspan="2" class="group-start" scope="col">Consistent</th>
+              <th colspan="2" class="group-start" scope="colgroup">Inconsistent</th>
+              <th colspan="2" class="group-start" scope="colgroup">Dataset 600</th>
+              <th colspan="2" class="group-start" scope="colgroup">Dataset 800</th>
+            </tr>
+            <tr>
+              <th class="group-start">Base</th><th class="ours">SFBD-RA</th>
+              <th class="group-start">Base</th><th class="ours">SFBD-RA</th>
+              <th class="group-start">Base</th><th class="ours">SFBD-RA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">SR (%)</th><td class="group-start">64.20 ± 4.26</td>
+              <td class="group-start">63.80 ± 4.50</td><td class="ours">73.4 ± 6.65</td>
+              <td class="group-start">71.83 ± 5.55</td><td class="ours">76.4 ± 1.5</td>
+              <td class="group-start">70.83 ± 5</td><td class="ours">80 ± 3.58</td></tr>
+            <tr><th scope="row">Error</th><td class="group-start">0.13 ± 0.01</td>
+              <td class="group-start">0.09 ± 0.01</td><td class="ours">0.14 ± 0.03</td>
+              <td class="group-start">0.11 ± 0.02</td><td class="ours">0.10 ± 0.02</td>
+              <td class="group-start">0.1 ± 0.01</td><td class="ours">0.0895 ± 0.0256</td></tr>
+            <tr><th scope="row">Ent.</th><td class="group-start">0.06 ± 0.03</td>
+              <td class="group-start">0.08 ± 0.03</td><td class="ours">0.14 ± 0.06</td>
+              <td class="group-start">0.21 ± 0.04</td><td class="ours">0.23 ± 0.03</td>
+              <td class="group-start">0.22 ± 0.03</td><td class="ours">0.27 ± 0.05</td></tr>
+            <tr><th scope="row">Time (frames)</th><td class="group-start">185.05 ± 4.32</td>
+              <td class="group-start">204.90 ± 2.16</td><td class="ours">188.38 ± 1.66</td>
+              <td class="group-start">194.04 ± 5.11</td><td class="ours">188.85 ± 4.39</td>
+              <td class="group-start">191 ± 10.1</td><td class="ours">183.09 ± 8.72</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CODE AND CITATION: add your anonymous code link here ============ -->
+  <section id="code">
+    <div class="wrap">
+      <h2>Code and citation</h2>
+      <p>Code is available through an anonymized repository: <a href="#" id="code-link">link to be added</a>.</p>
+      <p>Citation details will be added after the review process.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">This page is anonymized for peer review.</div>
+</footer>
+
+<!-- All behavior lives in script.js -->
+<script src="script.js"></script>
+</body>
+</html>

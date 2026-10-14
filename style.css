@@ -1,0 +1,208 @@
+/* =====================================================================
+   style.css: how the page looks.
+   index.html links to this file with:
+     <link rel="stylesheet" href="style.css">
+   Sections below:
+     1. Color and font tokens (edit these first)
+     2. Page basics
+     3. Header and link buttons
+     4. Denoising illustration
+     5. Sections, method steps
+     6. Figures and placeholders
+     7. Tables
+     8. Footer and phone layout
+   ===================================================================== */
+
+/* ---- 1. Color and font tokens ---------------------------------------
+   Change a value here and it updates everywhere it is used, via var(--name).
+   The second block sets the dark-mode versions, used automatically when
+   the viewer's system is in dark mode. */
+:root {
+  --paper: #fbfcfd;
+  --panel: #f0f3f6;
+  --ink: #18212b;
+  --ink-soft: #4a5866;
+  --rule: #d6dde4;
+  --clean: #2f62a8;   /* clean baseline: blue, as in the paper's figures */
+  --noisy: #c0392b;   /* noisy baseline: red */
+  --ours: #2e8b57;    /* SFBD-RA: green */
+  --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --measure: 40rem;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #12181f;
+    --panel: #1b232c;
+    --ink: #e4e9ee;
+    --ink-soft: #a3afbb;
+    --rule: #2e3a46;
+    --clean: #7aa5e6;
+    --noisy: #ec7a6c;
+    --ours: #5fc48d;
+    color-scheme: dark;
+  }
+}
+/* ---- 2. Page basics ---- */
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--clean); text-underline-offset: 0.18em; }
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--ours);
+  outline-offset: 3px;
+}
+img { max-width: 100%; height: auto; display: block; }
+
+.wrap { max-width: var(--measure); margin: 0 auto; padding: 0 1.25rem; }
+.wide { max-width: 70rem; margin: 0 auto; padding: 0 1.25rem; }
+
+/* ---- 3. Header and link buttons ---- */
+header { padding: 4.5rem 0 1.5rem; }
+h1 {
+  font-size: clamp(1.9rem, 4.6vw, 3rem);
+  line-height: 1.12;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  margin: 0 0 1.25rem;
+  max-width: 22ch;
+}
+.subtitle {
+  font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+  color: var(--ink-soft);
+  margin: 0 0 1.75rem;
+  max-width: 34ch;
+}
+.status {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin: 0 0 1.5rem;
+}
+.links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
+.links a, .links span {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 2rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+.links a:hover { background: var(--ink); color: var(--paper); }
+.links span { border-style: dashed; color: var(--ink-soft); border-color: var(--rule); }
+
+/* ---- 4. Denoising illustration ---- */
+.demo { margin-top: 2.5rem; margin-bottom: 1rem; }
+.demo svg { width: 100%; height: auto; display: block; background: var(--panel); border-radius: 6px; }
+.demo-controls {
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  font-family: var(--sans); font-size: 0.92rem; color: var(--ink-soft);
+  margin-top: 0.85rem;
+}
+.demo-controls label { display: flex; align-items: center; gap: 0.75rem; flex: 1 1 18rem; }
+.demo-controls input[type=range] { flex: 1; accent-color: var(--ours); }
+.demo-controls output { font-variant-numeric: tabular-nums; color: var(--ink); min-width: 9.5rem; }
+.demo-controls button {
+  font: inherit; color: var(--ink); background: none;
+  border: 1.5px solid var(--rule); border-radius: 2rem; padding: 0.3rem 0.9rem; cursor: pointer;
+}
+.demo-controls button:hover { border-color: var(--ink); }
+.note { font-family: var(--sans); font-size: 0.85rem; color: var(--ink-soft); margin: 0.5rem 0 0; }
+
+/* ---- 5. Sections ---- */
+section { padding: 2.75rem 0 0.5rem; }
+h2 { font-size: 1.65rem; line-height: 1.25; margin: 0 0 1rem; font-weight: 600; }
+h3 { font-size: 1.2rem; margin: 2rem 0 0.6rem; font-weight: 600; }
+p { margin: 0 0 1.1rem; }
+.lede { font-size: 1.2rem; }
+
+/* Method steps: the numbered circles are drawn by ::before using a CSS counter */
+.steps { list-style: none; padding: 0; margin: 1.5rem 0; counter-reset: step; }
+.steps li {
+  counter-increment: step;
+  position: relative;
+  padding: 0 0 1.25rem 3rem;
+  border-left: 2px solid var(--rule);
+  margin-left: 0.95rem;
+}
+.steps li:last-child { border-left-color: transparent; padding-bottom: 0; }
+.steps li::before {
+  content: counter(step);
+  position: absolute; left: -0.95rem; top: 0;
+  width: 1.9rem; height: 1.9rem; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--ink);
+  font-family: var(--sans); font-size: 0.9rem; font-weight: 600;
+  display: grid; place-items: center;
+}
+.steps li.loop::before { border-color: var(--ours); color: var(--ours); }
+.steps strong { font-family: var(--sans); font-weight: 600; font-size: 1rem; display: block; margin-bottom: 0.15rem; }
+.loop-note { font-family: var(--sans); font-size: 0.9rem; color: var(--ours); }
+
+/* ---- 6. Figures and placeholders ---- */
+figure { margin: 2rem 0; }
+figcaption { font-family: var(--sans); font-size: 0.9rem; color: var(--ink-soft); margin-top: 0.6rem; line-height: 1.5; }
+.missing {
+  aspect-ratio: 16 / 9;
+  border: 1.5px dashed var(--rule);
+  border-radius: 6px;
+  display: grid; place-items: center; text-align: center;
+  font-family: var(--sans); font-size: 0.9rem; color: var(--ink-soft);
+  padding: 1rem;
+  background: var(--panel);
+}
+.missing code { font-size: 0.85rem; color: var(--ink); }
+.video-frame video { width: 100%; border-radius: 6px; background: #000; }
+
+/* ---- 7. Tables ----
+   .group-start draws the vertical rule between column groups.
+   .ours colors the SFBD-RA columns green. */
+.table-scroll { overflow-x: auto; margin: 1.25rem 0 0.5rem; -webkit-overflow-scrolling: touch; }
+table {
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+  min-width: 34rem;
+}
+caption { caption-side: top; text-align: left; font-size: 0.9rem; color: var(--ink-soft); padding-bottom: 0.6rem; }
+th, td { padding: 0.5rem 0.65rem; text-align: center; white-space: nowrap; }
+thead th { font-weight: 600; border-bottom: 1px solid var(--rule); }
+thead tr:first-child th { border-bottom: 1px solid var(--rule); }
+tbody th { text-align: left; font-weight: 500; }
+tbody tr + tr { border-top: 1px solid var(--rule); }
+table { border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+th.ours { color: var(--ours); }
+td.ours { color: var(--ours); font-weight: 500; }
+.group-start { border-left: 1px solid var(--rule); }
+.metrics { font-family: var(--sans); font-size: 0.85rem; color: var(--ink-soft); }
+
+.legend { display: flex; flex-wrap: wrap; gap: 1.25rem; font-family: var(--sans); font-size: 0.85rem; color: var(--ink-soft); margin-top: 0.4rem; }
+.legend i { display: inline-block; width: 1.4rem; height: 3px; vertical-align: middle; margin-right: 0.4rem; border-radius: 2px; }
+
+/* ---- 8. Footer and phone layout ---- */
+footer {
+  margin-top: 4rem; padding: 2rem 0 3rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans); font-size: 0.85rem; color: var(--ink-soft);
+}
+
+@media (max-width: 560px) {
+  body { font-size: 1.05rem; }
+  header { padding-top: 2.5rem; }
+}
