@@ -18,21 +18,24 @@
    The second block sets the dark-mode versions, used automatically when
    the viewer's system is in dark mode. */
 :root {
-  --paper: #fbfcfd;
-  --panel: #f0f3f6;
-  --ink: #18212b;
-  --ink-soft: #4a5866;
-  --rule: #d6dde4;
-  --clean: #2f62a8;   /* clean baseline: blue, as in the paper's figures */
-  --noisy: #c0392b;   /* noisy baseline: red */
-  --ours: #2e8b57;    /* SFBD-RA: green */
-  --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --sans: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --measure: 64rem;
   color-scheme: light;
-  box-sizing: border-box;
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --bg: #ffffff;
+  --bg-soft: #f5f8fb;        /* background of alternating sections */
+  --ink: #1b1f23;            /* main text */
+  --muted: #5b6670;          /* captions, secondary text */
+  --line: #dfe5eb;           /* thin borders */
+  --line-strong: #cbd5df;
+  --blue: #2368c4;
+  --blue-dark: #174a91;      /* links, kicker labels */
+  --blue-soft: #e9f2ff;      /* highlighted nav link */
+  --ours: #2e7d55;           /* SFBD-RA green (also used by script.js) */
+  --clean: #2368c4;          /* clean baseline blue */
+  --noisy: #b44636;          /* noisy baseline red */
+  --shadow: 0 18px 40px rgba(35, 56, 78, 0.10);
+  --radius: 8px;
+  --container: 1120px;       /* width of figures, tables, hero */
+  --narrow: 820px;           /* width of text columns */
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root {
