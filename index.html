@@ -20,9 +20,13 @@
 <body>
 <!-- ============ TOP BAR: sticky navigation ============ -->
 <header class="topbar">
-  <a class="brand" href="#top">SFBD-RA</a>
+  <a class="brand" href="#top">
+    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24 C10 24 12 8 29 8"/></svg>
+    SFBD-RA
+  </a>
   <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
   <nav class="site-nav" aria-label="Main navigation">
+    <a href="#overview">Overview</a>
     <a href="#method">Method</a>
     <a href="#results">Simulation</a>
     <a href="#real-robot">Real Robot</a>
@@ -32,12 +36,11 @@
   <div class="read-progress" aria-hidden="true"><span></span></div>
 </header>
 
-<!-- ============ HERO: title, subtitle, link buttons ============ -->
+<!-- ============ HERO: title, link buttons, summary, teaser ============ -->
 <header class="hero" id="top">
   <div class="wide">
-    <h1>Stochastic Forward-Backward Deconvolution for Robotics Action (SFBD-RA)</h1>
-    <p class="status">Training diffusion policy from noisy demonstrations, with as little as 2% of them clean.</p>
-    <p class="status">Anonymous authors. Manuscript under review.</p>
+    <h1>Stochastic Forward&#8209;Backward Deconvolution<span>for Robotics Action (SFBD-RA)</span></h1>
+    <p class="status">Anonymous authors &middot; Manuscript under review</p>
     <nav class="links" aria-label="Paper links">
       <span class="pill disabled" title="The paper will be linked after the review process">Paper (under review)</span>
       <!-- Replace with an anonymized code link, e.g. https://anonymous.4open.science/r/your-repo -->
@@ -45,21 +48,42 @@
       <a class="pill" href="#video">Video</a>
       <a class="pill" href="#results">Results</a>
     </nav>
+
+    <div class="summary">
+      <p class="kicker">In short</p>
+      <p>Diffusion policies need clean expert demonstrations, which are expensive to collect. SFBD-RA trains on <em>noisy</em> demonstrations instead: it pretrains on a small clean set (as little as 2%), then alternates between denoising the noisy actions and refitting the policy. The result performs comparably to a policy trained on fully clean data, in simulation and on a real robot.</p>
+    </div>
   </div>
 </header>
 
 <main>
-  <!-- ============ ABSTRACT: paste from your paper ============ -->
-  <section id="abstract" data-section>
-    <div class="wrap">
-      <h2>Abstract</h2>
-      <p>Diffusion policy is a state-of-the-art approach for robot action generation conditioned on observations. However, to train the policy, existing methods typically assume access to clean expert demonstrations, which limits their applicability when clean expert data are scarce. To overcome this limitation, we adapt a deconvolution-based method from the image generation domain to robotic policy learning. The resulting framework achieves performance comparable to a model trained on an entirely clean dataset, while requiring as little as 2% of the demonstrations to be clean. We further demonstrate that clean demonstrations from related tasks can be leveraged through transfer learning to improve performance on the target task. The proposed approach is validated in both simulations and real-world experiments, where it achieves success rates and completion time comparable to the clean expert data baseline.</p>
+  <!-- ============ OVERVIEW: same start, three policies ============ -->
+  <!-- Put three GIFs in Assets/ with these names. Use the same environment
+       context (start and target pose) for all three so they are comparable. -->
+  <section id="overview" class="teaser" data-section>
+    <div class="wide">
+      <p class="teaser-title">Aligning task, same start and target for all three policies</p>
+      <div class="compare">
+        <figure class="noisy">
+          <img src="Assets/rollout_noisy.gif" alt="Policy trained on noisy demonstrations, aligning task" data-placeholder>
+          <figcaption><b>Noisy data only</b>Trained directly on noisy demonstrations.</figcaption>
+        </figure>
+        <figure class="ours">
+          <img src="Assets/rollout_sfbd_ra.gif" alt="SFBD-RA policy, aligning task" data-placeholder>
+          <figcaption><b>SFBD-RA (ours)</b>Noisy demonstrations + 2% clean.</figcaption>
+        </figure>
+        <figure class="clean">
+          <img src="Assets/rollout_clean.gif" alt="Policy trained on clean demonstrations, aligning task" data-placeholder>
+          <figcaption><b>Clean data (reference)</b>Trained on fully clean demonstrations.</figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 
   <!-- ============ METHOD: the three steps of SFBD-RA ============ -->
-  <section id="method" class="soft" data-section>
+  <section id="method" data-section>
     <div class="wrap">
+      <p class="kicker">01 &middot; Method</p>
       <h2>How SFBD-RA works</h2>
       <p>SFBD-RA adapts stochastic forward-backward deconvolution from image generation to robot actions. The denoising target changes from pixels to actions, conditioned on the observation; the rest of the pipeline stays the same.</p>
       <ol class="steps">
@@ -81,8 +105,9 @@
   </section>
 
   <!-- ============ SIMULATION RESULTS: figures + first table ============ -->
-  <section id="results" data-section>
+  <section id="results" class="soft" data-section>
     <div class="wrap">
+      <p class="kicker">02 &middot; Simulation</p>
       <h2>Simulation results</h2>
       <p>We evaluate on three tasks from the D3IL benchmark in MuJoCo: avoiding, pushing and aligning. Results are averaged over six seeds.</p>
 
@@ -153,8 +178,9 @@
   </section>
 
   <!-- ============ REAL ROBOT: setup photo, video, robot table ============ -->
-  <section id="real-robot" class="soft" data-section>
+  <section id="real-robot" data-section>
     <div class="wrap">
+      <p class="kicker">03 &middot; Real robot</p>
       <h2>Real-robot experiments</h2>
       <p>A Franka Emika Panda pushes a 3D-printed box with markers on each side to a target pose, tracked by an external camera. Each policy is tested on 10 random start and target poses, twice each, for 20 episodes per policy. SFBD-RA beats the policy trained directly on noisy data in success rate and pose error at both noise levels, even with only 2% clean demonstrations.</p>
 
@@ -207,8 +233,9 @@
   </section>
 
   <!-- ============ ABLATION: dataset-size table ============ -->
-  <section id="ablation" data-section>
+  <section id="ablation" class="soft" data-section>
     <div class="wrap">
+      <p class="kicker">04 &middot; Ablation</p>
       <h2>Sensitivity to dataset size</h2>
       <p>The 1000 human demonstrations for aligning are split into a consistent cluster (638) and an inconsistent cluster (362). Starting from all inconsistent demonstrations, we add consistent ones to reach 600 and 800 in total. SFBD-RA improves the success rate at every size.</p>
     </div>
@@ -253,9 +280,19 @@
     </div>
   </section>
 
+  <!-- ============ ABSTRACT: paste from your paper ============ -->
+  <section id="abstract" data-section>
+    <div class="wrap">
+      <p class="kicker">Paper</p>
+      <h2>Abstract</h2>
+      <p>Diffusion policy is a state-of-the-art approach for robot action generation conditioned on observations. However, to train the policy, existing methods typically assume access to clean expert demonstrations, which limits their applicability when clean expert data are scarce. To overcome this limitation, we adapt a deconvolution-based method from the image generation domain to robotic policy learning. The resulting framework achieves performance comparable to a model trained on an entirely clean dataset, while requiring as little as 2% of the demonstrations to be clean. We further demonstrate that clean demonstrations from related tasks can be leveraged through transfer learning to improve performance on the target task. The proposed approach is validated in both simulations and real-world experiments, where it achieves success rates and completion time comparable to the clean expert data baseline.</p>
+    </div>
+  </section>
+
   <!-- ============ CODE AND CITATION: add your anonymous code link here ============ -->
   <section id="code" class="soft" data-section>
     <div class="wrap">
+      <p class="kicker">Resources</p>
       <h2>Code and citation</h2>
       <p>Code is available through an anonymized repository: <a href="#" id="code-link">link to be added</a>.</p>
       <p>Citation details will be added after the review process.</p>

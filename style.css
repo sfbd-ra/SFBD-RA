@@ -14,7 +14,9 @@
   --line-strong: #cbd5df;
   --blue: #2368c4;
   --blue-dark: #174a91;      /* links, kicker labels */
-  --blue-soft: #e9f2ff;      /* highlighted nav link */
+  --blue-soft: #e9f2ff;
+  --accent: #2e7d55;         /* page accent: nav highlight, kickers, progress */
+  --accent-soft: #e8f4ee;
   --ours: #2e7d55;           /* SFBD-RA green (also used by script.js) */
   --clean: #2368c4;          /* clean baseline blue */
   --noisy: #b44636;          /* noisy baseline red */
@@ -53,7 +55,8 @@ a { color: var(--blue-dark); }
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(14px);
 }
-.brand { color: var(--ink); text-decoration: none; font-size: 0.95rem; font-weight: 760; }
+.brand { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); text-decoration: none; font-size: 0.95rem; font-weight: 760; }
+.brand-mark { width: 22px; height: 22px; fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round; }
 .site-nav { display: flex; align-items: center; gap: 6px; }
 .site-nav a, .nav-toggle {
   border: 0;
@@ -67,30 +70,30 @@ a { color: var(--blue-dark); }
   font-weight: 680;
 }
 .site-nav a:hover, .site-nav a.active, .nav-toggle:hover {
-  background: var(--blue-soft);
-  color: var(--blue-dark);
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 .nav-toggle { display: none; cursor: pointer; }
 .read-progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; }
-.read-progress span { display: block; width: 0; height: 100%; background: var(--blue); }
+.read-progress span { display: block; width: 0; height: 100%; background: var(--accent); }
 
 /* ---- STEP 3: Hero ------------------------------------------------- */
 .hero {
-  padding: 54px 0 38px;
-  border-bottom: 1px solid var(--line);
-  background: linear-gradient(180deg, #ffffff 0%, #f7fafd 100%);
+  padding: 64px 0 40px;
+  background: radial-gradient(ellipse 70% 60% at 50% 0%, #eef7f2 0%, rgba(255,255,255,0) 70%), var(--bg);
   text-align: center;
 }
 h1 {
   max-width: 1000px;
   margin: 0 auto;
-  font-size: 3rem;
-  line-height: 1.08;
+  font-size: 2.9rem;
+  line-height: 1.12;
   font-weight: 780;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
-h1 span { display: block; margin-top: 0.2em; font-weight: 400; }
-.status { margin: 16px 0 0; color: #303943; font-size: 1.14rem; }
+h1 span { display: block; margin-top: 0.15em; font-weight: 400; color: #3a4550; }
+.status { margin: 18px 0 0; color: var(--muted); font-size: 1.05rem; }
 .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
 .pill {
   display: inline-flex;
@@ -107,18 +110,51 @@ h1 span { display: block; margin-top: 0.2em; font-weight: 400; }
 }
 .pill:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
 .pill.disabled { border-color: var(--line-strong); background: #eef3f7; color: #59636d; }
-.tldr {
-  max-width: 980px;
-  margin: 28px auto 0;
-  padding: clamp(20px, 3vw, 28px);
-  border: 1px solid #b9d4f5;
+/* "In short" summary card */
+.summary {
+  max-width: 860px;
+  margin: 34px auto 0;
+  padding: 22px 26px;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
   border-radius: var(--radius);
-  background: linear-gradient(135deg, rgba(237, 246, 255, 0.96), rgba(255, 247, 232, 0.64)), #f8fbff;
-  box-shadow: 0 18px 48px rgba(42, 87, 128, 0.1);
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(35, 56, 78, 0.07);
   text-align: left;
 }
-.tldr span { color: var(--blue-dark); font-size: 0.78rem; font-weight: 780; text-transform: uppercase; }
-.tldr p { margin: 9px 0 0; color: #243341; font-size: clamp(1.02rem, 1.8vw, 1.18rem); font-weight: 500; }
+.summary p { margin: 0; color: #243341; font-size: 1.08rem; line-height: 1.65; }
+.summary .kicker { margin-bottom: 8px; color: var(--accent); font-size: 0.78rem; }
+
+/* Small label above headings */
+.kicker {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Teaser: three rollouts side by side */
+section.teaser[data-section] { padding: 8px 0 64px; border-bottom: 1px solid var(--line); }
+.teaser-title { margin: 0 0 14px; text-align: center; color: var(--muted); font-size: 0.95rem; }
+.compare { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.compare figure { margin: 0; }
+.compare img, .compare .missing {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--c);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+.compare figcaption { margin-top: 10px; text-align: center; font-size: 0.88rem; }
+.compare figcaption b { display: block; color: var(--c); font-size: 1rem; }
+.compare .noisy { --c: var(--noisy); }
+.compare .ours  { --c: var(--ours); }
+.compare .clean { --c: var(--clean); }
 
 /* The denoising illustration, shown as a card like the teaser video */
 .demo {
@@ -145,8 +181,8 @@ h1 span { display: block; margin-top: 0.2em; font-weight: 400; }
 /* ---- STEP 4: Sections --------------------------------------------- */
 section[data-section] { padding: 72px 0; }
 section.soft { background: var(--bg-soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-h2 { margin: 0 0 14px; font-size: 2rem; line-height: 1.14; font-weight: 760; text-align: center; }
-h2 + p { font-size: 1.1rem; line-height: 1.62; color: #303943; }   /* lead paragraph; long text reads better left-aligned */
+h2 { margin: 0 0 16px; font-size: 2rem; line-height: 1.18; font-weight: 760; letter-spacing: -0.01em; }
+h2 + p { font-size: 1.08rem; line-height: 1.62; color: #303943; }   /* lead paragraph; long text reads better left-aligned */
 h3 { font-size: 1.2rem; margin: 2rem 0 0.6rem; font-weight: 700; }
 p { margin: 0 0 1rem; }
 
@@ -185,7 +221,7 @@ figure img, .video-frame video {
   background: #fff;
   box-shadow: var(--shadow);
 }
-figcaption { font-size: 0.9rem; color: var(--muted); margin-top: 0.7rem; line-height: 1.5; text-align: center; }
+figcaption { font-size: 0.9rem; color: var(--muted); margin-top: 0.7rem; line-height: 1.5; }
 .missing {
   aspect-ratio: 16 / 9;
   display: grid; place-items: center; text-align: center;
@@ -195,7 +231,7 @@ figcaption { font-size: 0.9rem; color: var(--muted); margin-top: 0.7rem; line-he
   background: #fff;
   font-size: 0.9rem; color: var(--muted);
 }
-.legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.25rem; font-size: 0.85rem; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: 0.85rem; color: var(--muted); }
 .legend i { display: inline-block; width: 1.4rem; height: 3px; vertical-align: middle; margin-right: 0.4rem; border-radius: 2px; }
 
 .table-scroll {
@@ -215,7 +251,7 @@ tbody tr + tr { border-top: 1px solid var(--line); }
 .group-start { border-left: 1px solid var(--line); }
 th.ours { color: var(--ours); }
 td.ours { color: var(--ours); font-weight: 600; background: rgba(46, 125, 85, 0.05); }
-.metrics { font-size: 0.85rem; color: var(--muted); text-align: center; }
+.metrics { font-size: 0.85rem; color: var(--muted); }
 
 /* ---- STEP 6: Footer and small screens ------------------------------ */
 footer { padding: 2rem 0 3rem; border-top: 1px solid var(--line); text-align: center; font-size: 0.85rem; color: var(--muted); }
@@ -228,7 +264,8 @@ footer { padding: 2rem 0 3rem; border-top: 1px solid var(--line); text-align: ce
 }
 @media (max-width: 760px) {
   body { font-size: 16px; }
-  h1 { font-size: 2.1rem; }
+  h1 { font-size: 2rem; }
+  .compare { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
   h2 { font-size: 1.6rem; }
   section[data-section] { padding: 52px 0; }
 }
