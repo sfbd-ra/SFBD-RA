@@ -26,17 +26,18 @@
   </a>
   <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
   <nav class="site-nav" aria-label="Main navigation">
+    <a href="#abstract">Abstract</a>
     <a href="#overview">Overview</a>
     <a href="#method">Method</a>
     <a href="#results">Simulation</a>
     <a href="#real-robot">Real Robot</a>
     <a href="#ablation">Ablation</a>
-    <a href="#abstract">Abstract</a>
+    <a href="#analysis">Analysis</a>
   </nav>
   <div class="read-progress" aria-hidden="true"><span></span></div>
 </header>
 
-<!-- ============ HERO: title, link buttons, summary, teaser ============ -->
+<!-- ============ HERO: title, link buttons, abstract ============ -->
 <header class="hero" id="top">
   <div class="wide">
     <h1>Stochastic Forward&#8209;Backward Deconvolution<span>for Robotics Action (SFBD-RA)</span></h1>
@@ -49,9 +50,9 @@
       <a class="pill" href="#results">Results</a>
     </nav>
 
-    <div class="summary">
-      <p class="kicker">In short</p>
-      <p>Diffusion policies need clean expert demonstrations, which are expensive to collect. SFBD-RA trains on <em>noisy</em> demonstrations instead: it pretrains on a small clean set (as little as 2%), then alternates between denoising the noisy actions and refitting the policy. The result performs comparably to a policy trained on fully clean data, in simulation and on a real robot.</p>
+    <div class="summary" id="abstract">
+      <p class="kicker">Abstract</p>
+      <p>Diffusion policy is a state-of-the-art approach for robot action generation conditioned on observations. However, to train the policy, existing methods typically assume access to clean expert demonstrations, which limits their applicability when clean expert data are scarce. To overcome this limitation, we adapt a deconvolution-based method from the image generation domain to robotic policy learning. The resulting framework achieves performance comparable to a model trained on an entirely clean dataset, while requiring as little as 2% of the demonstrations to be clean. We further demonstrate that clean demonstrations from related tasks can be leveraged through transfer learning to improve performance on the target task. The proposed approach is validated in both simulations and real-world experiments, where it achieves success rates and completion time comparable to the clean expert data baseline.</p>
     </div>
   </div>
 </header>
@@ -83,8 +84,7 @@
   <!-- ============ METHOD: the three steps of SFBD-RA ============ -->
   <section id="method" data-section>
     <div class="wrap">
-      <p class="kicker">01 &middot; Method</p>
-      <h2>How SFBD-RA works</h2>
+      <h2>1. How SFBD-RA works</h2>
       <p>SFBD-RA adapts stochastic forward-backward deconvolution from image generation to robot actions. The denoising target changes from pixels to actions, conditioned on the observation; the rest of the pipeline stays the same.</p>
       <ol class="steps">
         <li>
@@ -107,8 +107,7 @@
   <!-- ============ SIMULATION RESULTS: figures + first table ============ -->
   <section id="results" class="soft" data-section>
     <div class="wrap">
-      <p class="kicker">02 &middot; Simulation</p>
-      <h2>Simulation results</h2>
+      <h2>2. Simulation results</h2>
       <p>We evaluate on three tasks from the D3IL benchmark in MuJoCo: avoiding, pushing and aligning. Results are averaged over six seeds.</p>
 
       <figure>
@@ -136,7 +135,7 @@
       <p>The original D3IL human demonstrations vary in quality, so we treat them as containing real-world noise. Clustering by path length, jerk and curvature separates a consistent set, from which 10% is sampled as the clean set.</p>
     </div>
 
-    <div class="wide">
+    <div class="wrap">
       <div class="table-scroll" tabindex="0" role="region" aria-label="Simulation results with human demonstrations">
         <table>
           <caption>Human demonstrations for three tasks. In the transfer column, the aligning policy is pretrained on clean demonstrations from the avoiding task.</caption>
@@ -155,21 +154,21 @@
           </thead>
           <tbody>
             <tr><th scope="row">SR (%)</th>
-              <td class="group-start">63.25 ± 0.5</td><td class="ours">78 ± 2.76</td>
-              <td class="group-start">49.8 ± 4.50</td><td class="ours">63.60 ± 8.96</td>
-              <td class="group-start">87 ± 3.03</td><td class="ours">84 ± 1.6</td><td class="ours">79.4 ± 3.44</td></tr>
+              <td class="group-start">63.25 <small>± 0.5</small></td><td class="ours">78 <small>± 2.76</small></td>
+              <td class="group-start">49.8 <small>± 4.50</small></td><td class="ours">63.60 <small>± 8.96</small></td>
+              <td class="group-start">87 <small>± 3.03</small></td><td class="ours">84 <small>± 1.6</small></td><td class="ours">79.4 <small>± 3.44</small></td></tr>
             <tr><th scope="row">Error</th>
               <td class="group-start">N/A</td><td class="ours">N/A</td>
-              <td class="group-start">0.13 ± 0.01</td><td class="ours">0.09 ± 0.02</td>
-              <td class="group-start">0.06 ± 0.01</td><td class="ours">0.07 ± 0.01</td><td class="ours">0.09 ± 0.01</td></tr>
+              <td class="group-start">0.13 <small>± 0.01</small></td><td class="ours">0.09 <small>± 0.02</small></td>
+              <td class="group-start">0.06 <small>± 0.01</small></td><td class="ours">0.07 <small>± 0.01</small></td><td class="ours">0.09 <small>± 0.01</small></td></tr>
             <tr><th scope="row">Ent.</th>
-              <td class="group-start">0.88 ± 0.02</td><td class="ours">0.69 ± 0.01</td>
-              <td class="group-start">0.33 ± 0.05</td><td class="ours">0.44 ± 0.07</td>
-              <td class="group-start">0.34 ± 0.06</td><td class="ours">0.28 ± 0.05</td><td class="ours">0.09 ± 0.05</td></tr>
+              <td class="group-start">0.88 <small>± 0.02</small></td><td class="ours">0.69 <small>± 0.01</small></td>
+              <td class="group-start">0.33 <small>± 0.05</small></td><td class="ours">0.44 <small>± 0.07</small></td>
+              <td class="group-start">0.34 <small>± 0.06</small></td><td class="ours">0.28 <small>± 0.05</small></td><td class="ours">0.09 <small>± 0.05</small></td></tr>
             <tr><th scope="row">Time (frames)</th>
-              <td class="group-start">66.4 ± 0.51</td><td class="ours">63.43 ± 0.33</td>
-              <td class="group-start">249 ± 2.75</td><td class="ours">249.31 ± 6.62</td>
-              <td class="group-start">171.43 ± 4.46</td><td class="ours">170.19 ± 5.09</td><td class="ours">187.11 ± 5.93</td></tr>
+              <td class="group-start">66.4 <small>± 0.51</small></td><td class="ours">63.43 <small>± 0.33</small></td>
+              <td class="group-start">249 <small>± 2.75</small></td><td class="ours">249.31 <small>± 6.62</small></td>
+              <td class="group-start">171.43 <small>± 4.46</small></td><td class="ours">170.19 <small>± 5.09</small></td><td class="ours">187.11 <small>± 5.93</small></td></tr>
           </tbody>
         </table>
       </div>
@@ -180,8 +179,7 @@
   <!-- ============ REAL ROBOT: setup photo, video, robot table ============ -->
   <section id="real-robot" data-section>
     <div class="wrap">
-      <p class="kicker">03 &middot; Real robot</p>
-      <h2>Real-robot experiments</h2>
+      <h2>3. Real-robot experiments</h2>
       <p>A Franka Emika Panda pushes a 3D-printed box with markers on each side to a target pose, tracked by an external camera. Each policy is tested on 10 random start and target poses, twice each, for 20 episodes per policy. SFBD-RA beats the policy trained directly on noisy data in success rate and pose error at both noise levels, even with only 2% clean demonstrations.</p>
 
       <figure>
@@ -198,7 +196,7 @@
       </figure>
     </div>
 
-    <div class="wide">
+    <div class="wrap">
       <div class="table-scroll" tabindex="0" role="region" aria-label="Real-robot results">
         <table>
           <caption>Real-robot results, 20 episodes per policy. SFBD-RA is pretrained on 2% or 10% clean demonstrations.</caption>
@@ -235,11 +233,10 @@
   <!-- ============ ABLATION: dataset-size table ============ -->
   <section id="ablation" class="soft" data-section>
     <div class="wrap">
-      <p class="kicker">04 &middot; Ablation</p>
-      <h2>Sensitivity to dataset size</h2>
+      <h2>4. Sensitivity to dataset size</h2>
       <p>The 1000 human demonstrations for aligning are split into a consistent cluster (638) and an inconsistent cluster (362). Starting from all inconsistent demonstrations, we add consistent ones to reach 600 and 800 in total. SFBD-RA improves the success rate at every size.</p>
     </div>
-    <div class="wide">
+    <div class="wrap">
       <div class="table-scroll" tabindex="0" role="region" aria-label="Ablation on dataset size">
         <table>
           <caption>Aligning task with human demonstrations of mixed quality and size.</caption>
@@ -258,41 +255,133 @@
             </tr>
           </thead>
           <tbody>
-            <tr><th scope="row">SR (%)</th><td class="group-start">64.20 ± 4.26</td>
-              <td class="group-start">63.80 ± 4.50</td><td class="ours">73.4 ± 6.65</td>
-              <td class="group-start">71.83 ± 5.55</td><td class="ours">76.4 ± 1.5</td>
-              <td class="group-start">70.83 ± 5</td><td class="ours">80 ± 3.58</td></tr>
-            <tr><th scope="row">Error</th><td class="group-start">0.13 ± 0.01</td>
-              <td class="group-start">0.09 ± 0.01</td><td class="ours">0.14 ± 0.03</td>
-              <td class="group-start">0.11 ± 0.02</td><td class="ours">0.10 ± 0.02</td>
-              <td class="group-start">0.1 ± 0.01</td><td class="ours">0.0895 ± 0.0256</td></tr>
-            <tr><th scope="row">Ent.</th><td class="group-start">0.06 ± 0.03</td>
-              <td class="group-start">0.08 ± 0.03</td><td class="ours">0.14 ± 0.06</td>
-              <td class="group-start">0.21 ± 0.04</td><td class="ours">0.23 ± 0.03</td>
-              <td class="group-start">0.22 ± 0.03</td><td class="ours">0.27 ± 0.05</td></tr>
-            <tr><th scope="row">Time (frames)</th><td class="group-start">185.05 ± 4.32</td>
-              <td class="group-start">204.90 ± 2.16</td><td class="ours">188.38 ± 1.66</td>
-              <td class="group-start">194.04 ± 5.11</td><td class="ours">188.85 ± 4.39</td>
-              <td class="group-start">191 ± 10.1</td><td class="ours">183.09 ± 8.72</td></tr>
+            <tr><th scope="row">SR (%)</th><td class="group-start">64.20 <small>± 4.26</small></td>
+              <td class="group-start">63.80 <small>± 4.50</small></td><td class="ours">73.4 <small>± 6.65</small></td>
+              <td class="group-start">71.83 <small>± 5.55</small></td><td class="ours">76.4 <small>± 1.5</small></td>
+              <td class="group-start">70.83 <small>± 5</small></td><td class="ours">80 <small>± 3.58</small></td></tr>
+            <tr><th scope="row">Error</th><td class="group-start">0.13 <small>± 0.01</small></td>
+              <td class="group-start">0.09 <small>± 0.01</small></td><td class="ours">0.14 <small>± 0.03</small></td>
+              <td class="group-start">0.11 <small>± 0.02</small></td><td class="ours">0.10 <small>± 0.02</small></td>
+              <td class="group-start">0.1 <small>± 0.01</small></td><td class="ours">0.0895 <small>± 0.0256</small></td></tr>
+            <tr><th scope="row">Ent.</th><td class="group-start">0.06 <small>± 0.03</small></td>
+              <td class="group-start">0.08 <small>± 0.03</small></td><td class="ours">0.14 <small>± 0.06</small></td>
+              <td class="group-start">0.21 <small>± 0.04</small></td><td class="ours">0.23 <small>± 0.03</small></td>
+              <td class="group-start">0.22 <small>± 0.03</small></td><td class="ours">0.27 <small>± 0.05</small></td></tr>
+            <tr><th scope="row">Time (frames)</th><td class="group-start">185.05 <small>± 4.32</small></td>
+              <td class="group-start">204.90 <small>± 2.16</small></td><td class="ours">188.38 <small>± 1.66</small></td>
+              <td class="group-start">194.04 <small>± 5.11</small></td><td class="ours">188.85 <small>± 4.39</small></td>
+              <td class="group-start">191 <small>± 10.1</small></td><td class="ours">183.09 <small>± 8.72</small></td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <!-- ============ ABSTRACT: paste from your paper ============ -->
-  <section id="abstract" data-section>
+  <!-- ============ ADDITIONAL ANALYSIS: 2-3 short studies ============ -->
+  <!-- Each study is one <article class="analysis">. Copy a block to add one,
+       delete a block (and its link in .analysis-index) to remove one. -->
+  <section id="analysis" data-section>
     <div class="wrap">
-      <p class="kicker">Paper</p>
-      <h2>Abstract</h2>
-      <p>Diffusion policy is a state-of-the-art approach for robot action generation conditioned on observations. However, to train the policy, existing methods typically assume access to clean expert demonstrations, which limits their applicability when clean expert data are scarce. To overcome this limitation, we adapt a deconvolution-based method from the image generation domain to robotic policy learning. The resulting framework achieves performance comparable to a model trained on an entirely clean dataset, while requiring as little as 2% of the demonstrations to be clean. We further demonstrate that clean demonstrations from related tasks can be leveraged through transfer learning to improve performance on the target task. The proposed approach is validated in both simulations and real-world experiments, where it achieves success rates and completion time comparable to the clean expert data baseline.</p>
+      <h2>5. Additional analysis</h2>
+      <p>One or two sentences introducing what these studies look at beyond the main results.</p>
+      <nav class="analysis-index" aria-label="Analyses in this section">
+        <a href="#analysis-a"><span>A</span>Title of first analysis</a>
+        <a href="#analysis-b"><span>B</span>Title of second analysis</a>
+        <a href="#analysis-c"><span>C</span>Title of third analysis</a>
+      </nav>
+
+      <!-- ---- Analysis A ---- -->
+      <article class="analysis" id="analysis-a">
+        <p class="analysis-label">Analysis A</p>
+        <h3>Title of first analysis</h3>
+        <p>Describe the question this analysis answers and how you set it up (task, noise level, number of seeds).</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Title of first analysis">
+          <table>
+            <caption>Table caption: what is compared and under which setting.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Setting</th>
+                <th class="group-start">Noisy</th>
+                <th>Clean</th>
+                <th class="ours">SFBD-RA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Row 1</th>
+                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+              <tr><th scope="row">Row 2</th>
+                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+              <tr><th scope="row">Row 3</th>
+                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> one sentence on what the reader should conclude.</p>
+      </article>
+
+      <!-- ---- Analysis B ---- -->
+      <article class="analysis" id="analysis-b">
+        <p class="analysis-label">Analysis B</p>
+        <h3>Title of second analysis</h3>
+        <p>Describe the question this analysis answers and how you set it up (task, noise level, number of seeds).</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Title of second analysis">
+          <table>
+            <caption>Table caption: what is compared and under which setting.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Setting</th>
+                <th class="group-start">Noisy</th>
+                <th>Clean</th>
+                <th class="ours">SFBD-RA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Row 1</th>
+                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+              <tr><th scope="row">Row 2</th>
+                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+              <tr><th scope="row">Row 3</th>
+                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> one sentence on what the reader should conclude.</p>
+      </article>
+
+      <!-- ---- Analysis C ---- -->
+      <article class="analysis" id="analysis-c">
+        <p class="analysis-label">Analysis C</p>
+        <h3>Title of third analysis</h3>
+        <p>Describe the question this analysis answers and how you set it up (task, noise level, number of seeds).</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Title of third analysis">
+          <table>
+            <caption>Table caption: what is compared and under which setting.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Setting</th>
+                <th class="group-start">Noisy</th>
+                <th>Clean</th>
+                <th class="ours">SFBD-RA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Row 1</th>
+                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+              <tr><th scope="row">Row 2</th>
+                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+              <tr><th scope="row">Row 3</th>
+                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> one sentence on what the reader should conclude.</p>
+      </article>
     </div>
   </section>
 
   <!-- ============ CODE AND CITATION: add your anonymous code link here ============ -->
   <section id="code" class="soft" data-section>
     <div class="wrap">
-      <p class="kicker">Resources</p>
       <h2>Code and citation</h2>
       <p>Code is available through an anonymized repository: <a href="#" id="code-link">link to be added</a>.</p>
       <p>Citation details will be added after the review process.</p>
