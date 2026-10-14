@@ -28,7 +28,7 @@
   --ours: #2e8b57;    /* SFBD-RA: green */
   --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --sans: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --measure: 40rem;
+  --measure: 64rem;
   color-scheme: light;
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
@@ -67,7 +67,7 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 img { max-width: 100%; height: auto; display: block; }
 
 .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 1.25rem; }
-.wide { max-width: 70rem; margin: 0 auto; padding: 0 1.25rem; }
+.wide { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; }
 
 /* ---- 3. Header and link buttons ---- */
 header { padding: 4.5rem 0 1.5rem; }
