@@ -154,6 +154,7 @@ section.teaser[data-section] { padding: 8px 0 64px; border-bottom: 1px solid var
 .compare .noisy { --c: var(--noisy); }
 .compare .ours  { --c: var(--ours); }
 .compare .clean { --c: var(--clean); }
+.overview-video { max-width: 940px; margin: 56px auto 0; }
 
 /* The denoising illustration, shown as a card like the teaser video */
 .demo {

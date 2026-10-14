@@ -58,7 +58,7 @@
 </header>
 
 <main>
-  <!-- ============ OVERVIEW: same start, three policies ============ -->
+  <!-- ============ OVERVIEW: three rollouts, then the video ============ -->
   <!-- Put three GIFs in Assets/ with these names. Use the same environment
        context (start and target pose) for all three so they are comparable. -->
   <section id="overview" class="teaser" data-section>
@@ -78,6 +78,14 @@
           <figcaption><b>Clean data (reference)</b>Trained on fully clean demonstrations.</figcaption>
         </figure>
       </div>
+
+      <!-- Video walkthrough. Self-hosted: no channel name or uploader attached. -->
+      <figure id="video" class="video-frame overview-video">
+        <p class="teaser-title">Video: how SFBD-RA works and how it performs</p>
+        <video controls preload="metadata" playsinline data-placeholder-video>
+          <source src="Assets/overview_video.mp4" type="video/mp4">
+        </video>
+      </figure>
     </div>
   </section>
 
@@ -185,14 +193,6 @@
       <figure>
         <img src="Assets/experiment_setup.jpeg" alt="Physical setup: robot arm, marker box and external camera" loading="lazy" data-placeholder>
         <figcaption>Experimental setup.</figcaption>
-      </figure>
-
-      <figure id="video" class="video-frame">
-        <!-- Self-hosted video: no channel name or uploader attached. -->
-        <video controls preload="metadata" playsinline data-placeholder-video>
-          <source src="Assets/supplementary_video.mp4" type="video/mp4">
-        </video>
-        <figcaption>Supplementary video.</figcaption>
       </figure>
     </div>
 
