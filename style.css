@@ -216,30 +216,28 @@ p { margin: 0 0 1rem; }
 .steps > li + li, .loop-steps > li + li { margin-top: 40px; }
 .steps > li + li::after, .loop-steps > li + li::after {
   content: "";
-  position: absolute; left: 25px; top: -36px;
+  position: absolute; left: 50%; top: -36px;
   width: 18px; height: 32px;
-  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 32'%3E%3Cpath d='M9 1v28M2 22l7 8 7-8' fill='none' stroke='%237d8a96' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-.loop-steps > li + li::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 32'%3E%3Cpath d='M9 1v28M2 22l7 8 7-8' fill='none' stroke='%232e7d55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  transform: translateX(-50%);
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 32'%3E%3Cpath d='M9 1v28M2 22l7 8 7-8' fill='none' stroke='%232e7d55' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 .loop-group { position: relative; }
-.steps > li.loop-group::after { left: 29px; }   /* the 1 -> 2 arrow sits on the group, align with the circles */
+.loop-steps > li + li::after { left: calc(50% - 1.5px); }   /* card has a 4px left / 1px right border; match the 1 -> 2 arrow */
 
 /* Loop arrow: from step 3 back up to step 2, in the right gutter */
 .loop-steps { position: relative; }
 .loop-steps::after {
   content: "";
   position: absolute; top: 34px; bottom: 34px; right: -40px;
-  width: 40px;
-  border: 2px solid var(--ours); border-left: 0;
+  width: 32px;   /* starts 8px off the card, just behind the arrow tip at 6px */
+  border: 3px solid var(--ours); border-left: 0;
   border-radius: 0 16px 16px 0;
 }
 .loop-steps::before {   /* arrowhead pointing back into step 2 */
   content: "";
-  position: absolute; top: 27px; right: -2px; z-index: 1;
-  width: 12px; height: 16px;
-  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 16'%3E%3Cpath d='M10 1 3 8l7 7' fill='none' stroke='%232e7d55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  position: absolute; top: 28px; right: -15px; z-index: 1;   /* 28 + 15/2 = 35.5, the centre of the 3px line at top 34 */
+  width: 12px; height: 15px;
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 15'%3E%3Cpath d='M10 1 3 7.5l7 6.5' fill='none' stroke='%232e7d55' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 .loop-label {
   position: absolute; top: 50%; right: -39px;   /* centred on the loop line */
@@ -251,7 +249,7 @@ p { margin: 0 0 1rem; }
 }
 @media (max-width: 560px) {
   .steps { padding-right: 44px; }
-  .loop-steps::after { right: -28px; width: 28px; }
+  .loop-steps::after { right: -28px; width: 20px; }
   .loop-label { right: -27px; }
 }
 
