@@ -141,7 +141,7 @@ section.teaser[data-section] { padding: 8px 0 64px; border-bottom: 1px solid var
 .compare figure { margin: 0; }
 .compare img, .compare .missing {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 22 / 15;   /* matches the 660x450 GIFs, so the outcome badge is not cropped */
   object-fit: cover;
   border: 1px solid var(--line);
   border-top: 4px solid var(--c);
@@ -289,6 +289,8 @@ thead th { background: var(--bg-soft); font-weight: 700; border-bottom: 1px soli
 tbody th { text-align: left; font-weight: 600; }
 tbody tr + tr { border-top: 1px solid var(--line); }
 .group-start { border-left: 1px solid var(--line); }
+tbody tr.group-row { border-top: 2px solid var(--line-strong); }   /* first row of a block, e.g. a new noise level */
+tbody th[rowspan] { text-align: center; }
 th.ours { color: var(--ours); }
 td small { font-size: 0.82em; color: var(--muted); font-weight: 400; }
 td.ours { color: var(--ours); font-weight: 600; background: rgba(46, 125, 85, 0.05); }

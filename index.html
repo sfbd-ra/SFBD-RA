@@ -293,36 +293,82 @@
       <nav class="analysis-index" aria-label="Analyses in this section">
         <a href="#analysis-a"><span>A</span>Clean/noisy clustering analysis</a>
         <a href="#analysis-b"><span>B</span>Sensitivity to the quality of the pretraining dataset analysis</a>
-        <a href="#analysis-c"><span>C</span>Title of third analysis</a>
+        <a href="#analysis-c"><span>C</span>Transfer learning versus fine-tuning analysis</a>
       </nav>
 
       <!-- ---- Analysis A ---- -->
       <article class="analysis" id="analysis-a">
         <p class="analysis-label">Analysis A</p>
-        <h3>Title of first analysis</h3>
-        <p>Describe the question this analysis answers and how you set it up (task, noise level, number of seeds).</p>
-        <div class="table-scroll" tabindex="0" role="region" aria-label="Title of first analysis">
+        <h3>Clean/noisy clustering analysis</h3>
+        <p>How well does clustering pick out the clean demonstrations? We mix clean human demonstrations with synthetic noisy ones at three noise levels (σ = 0.0001, 0.0005, 0.002) and four clean ratios (20–80%), then separate them with K-means and with a Gaussian mixture model (GMM). Each setting is averaged over five resamples.</p>
+        <div class="table-scroll" id="table-a1" tabindex="0" role="region" aria-label="Clean-subset identification">
           <table>
-            <caption>Table caption: what is compared and under which setting.</caption>
+            <caption><b>Table A1.</b> Clean-subset identification (%). Precision: share of demonstrations labelled clean that are truly clean. Recall: share of truly clean demonstrations that are found.</caption>
             <thead>
               <tr>
-                <th scope="col">Setting</th>
-                <th class="group-start">Noisy</th>
-                <th>Clean</th>
-                <th class="ours">SFBD-RA</th>
+                <th rowspan="2" scope="col">Noise σ</th>
+                <th rowspan="2" scope="col">Clean (%)</th>
+                <th colspan="2" class="group-start" scope="colgroup">K-means</th>
+                <th colspan="2" class="group-start" scope="colgroup">GMM</th>
+              </tr>
+              <tr>
+                <th class="group-start">Precision</th><th>Recall</th>
+                <th class="group-start">Precision</th><th>Recall</th>
               </tr>
             </thead>
             <tbody>
-              <tr><th scope="row">Row 1</th>
-                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
-              <tr><th scope="row">Row 2</th>
-                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
-              <tr><th scope="row">Row 3</th>
-                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+              <tr class="group-row"><th scope="rowgroup" rowspan="4">0.002</th><td>20</td>
+                <td class="group-start">29.6 <small>± 1.1</small></td><td>100.0 <small>± 0.0</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.5 <small>± 0.5</small></td></tr>
+              <tr><td>40</td>
+                <td class="group-start">56.6 <small>± 1.5</small></td><td>99.5 <small>± 0.4</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.6 <small>± 0.3</small></td></tr>
+              <tr><td>60</td>
+                <td class="group-start">76.5 <small>± 1.6</small></td><td>99.6 <small>± 0.2</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.8 <small>± 0.2</small></td></tr>
+              <tr><td>80</td>
+                <td class="group-start">90.7 <small>± 0.9</small></td><td>100.0 <small>± 0.1</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.8 <small>± 0.1</small></td></tr>
+              <tr class="group-row"><th scope="rowgroup" rowspan="4">0.0005</th><td>20</td>
+                <td class="group-start">26.4 <small>± 0.2</small></td><td>98.5 <small>± 0.9</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.2 <small>± 0.8</small></td></tr>
+              <tr><td>40</td>
+                <td class="group-start">50.0 <small>± 0.9</small></td><td>98.6 <small>± 0.8</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.4 <small>± 0.4</small></td></tr>
+              <tr><td>60</td>
+                <td class="group-start">71.0 <small>± 0.8</small></td><td>98.4 <small>± 0.9</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.5 <small>± 0.2</small></td></tr>
+              <tr><td>80</td>
+                <td class="group-start">87.6 <small>± 1.2</small></td><td>98.4 <small>± 0.6</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.8 <small>± 0.1</small></td></tr>
+              <tr class="group-row"><th scope="rowgroup" rowspan="4">0.0001</th><td>20</td>
+                <td class="group-start">26.2 <small>± 0.4</small></td><td>95.0 <small>± 1.5</small></td><td class="group-start">47.6 <small>± 5.0</small></td><td>99.4 <small>± 0.4</small></td></tr>
+              <tr><td>40</td>
+                <td class="group-start">49.9 <small>± 0.8</small></td><td>95.6 <small>± 1.1</small></td><td class="group-start">73.8 <small>± 3.5</small></td><td>99.7 <small>± 0.2</small></td></tr>
+              <tr><td>60</td>
+                <td class="group-start">69.8 <small>± 0.4</small></td><td>96.2 <small>± 0.6</small></td><td class="group-start">89.8 <small>± 2.3</small></td><td>99.3 <small>± 0.5</small></td></tr>
+              <tr><td>80</td>
+                <td class="group-start">87.7 <small>± 0.7</small></td><td>87.8 <small>± 5.4</small></td><td class="group-start">95.9 <small>± 0.9</small></td><td>98.8 <small>± 0.3</small></td></tr>
             </tbody>
           </table>
         </div>
-        <p class="takeaway"><b>Takeaway:</b> one sentence on what the reader should conclude.</p>
+        <p>As shown in <a href="#table-a1">Table A1</a>, both methods find almost all clean demonstrations (high recall). The difference is precision: GMM labels no noisy demonstration as clean at σ = 0.002 and 0.0005, while K-means precision drops as the share of noisy demonstrations grows. Two reasons are likely. K-means assumes spherical clusters of equal spread, but the noisy demonstrations spread out more widely on the three clustering metrics (path length, jerk, curvature) and can overlap the clean cluster (<a href="#table-a2">Table A2</a>); GMM makes no such assumption. And because noise injection is stochastic, some demonstrations labelled noisy are in fact close to clean, so counting them as clean is harmless for training.</p>
+        <div class="table-scroll" id="table-a2" tabindex="0" role="region" aria-label="Spread of the clustering metrics">
+          <table>
+            <caption><b>Table A2.</b> Spread (mean ± standard deviation) of the three clustering metrics for clean and noise-injected demonstrations at each noise level.</caption>
+            <thead>
+              <tr>
+                <th rowspan="2" scope="col">Metric</th>
+                <th rowspan="2" class="group-start" scope="col">Clean</th>
+                <th colspan="3" class="group-start" scope="colgroup">Noisy, noise σ</th>
+              </tr>
+              <tr>
+                <th class="group-start">0.002</th><th>0.0005</th><th>0.0001</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Jerk (×10<sup>−3</sup>)</th>
+                <td class="group-start">4.15 <small>± 1.30</small></td><td class="group-start">13.08 <small>± 6.09</small></td><td>8.11 <small>± 4.32</small></td><td>7.61 <small>± 4.24</small></td></tr>
+              <tr><th scope="row">Path length (×10<sup>−3</sup>)</th>
+                <td class="group-start">10.13 <small>± 2.00</small></td><td class="group-start">11.68 <small>± 3.22</small></td><td>10.11 <small>± 2.72</small></td><td>9.91 <small>± 2.53</small></td></tr>
+              <tr><th scope="row">Curvature (×10<sup>3</sup>)</th>
+                <td class="group-start">1.16 <small>± 0.51</small></td><td class="group-start">12.44 <small>± 5.29</small></td><td>6.04 <small>± 2.80</small></td><td>2.83 <small>± 1.41</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> GMM separates clean from noisy demonstrations almost perfectly unless the noise is very small (σ = 0.0001), where the two are hard to tell apart; K-means finds the clean set but also admits many noisy demonstrations.</p>
       </article>
 
       <!-- ---- Analysis B ---- -->
