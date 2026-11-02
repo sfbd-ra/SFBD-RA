@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stochastic Forward-Backward Deconvolution for Robotics Action: Training Diffusion Policy from Noisy Demonstrations</title>
+<title>Stochastic Forward-Backward Deconvolution for Robotics: Training Diffusion Policy from Noisy Demonstrations</title>
 <meta name="description" content="Training diffusion policy from noisy demonstrations, with as little as 2% clean data.">
 <!-- Keeps the page out of search engines while under review. Remove after acceptance. -->
 <meta name="robots" content="noindex, nofollow">
@@ -40,7 +40,7 @@
 <!-- ============ HERO: title, link buttons, abstract ============ -->
 <header class="hero" id="top">
   <div class="wide">
-    <h1>Stochastic Forward&#8209;Backward Deconvolution for Robotics Action (SFBD-RA)</h1>
+    <h1>Stochastic Forward&#8209;Backward Deconvolution for Robotics (SFBD-RA)</h1>
     <p class="status">Anonymous authors &middot; Manuscript under review</p>
     <nav class="links" aria-label="Paper links">
       <span class="pill disabled" title="The paper will be linked after the review process">Paper (under review)</span>
@@ -63,7 +63,7 @@
        context (start and target pose) for all three so they are comparable. -->
   <section id="overview" class="teaser" data-section>
     <div class="wide">
-      <p class="teaser-title">Aligning task, same start and target for all three policies</p>
+      <!-- <p class="teaser-title">Aligning task, same start and target for all three policies</p> -->
       <div class="compare">
         <figure class="noisy">
           <img src="Assets/rollout_noisy.gif" alt="Policy trained on noisy demonstrations, aligning task" data-placeholder>
@@ -81,7 +81,7 @@
 
       <!-- Video walkthrough. Self-hosted: no channel name or uploader attached. -->
       <figure id="video" class="video-frame overview-video">
-        <p class="teaser-title">Video: how SFBD-RA works and how it performs</p>
+        <!-- <p class="teaser-title">Video: how SFBD-RA works and how it performs</p> -->
         <video controls preload="metadata" playsinline data-placeholder-video>
           <source src="Assets/overview_video.mp4" type="video/mp4">
         </video>
@@ -145,6 +145,32 @@
         <figcaption>Noise level σ = 0.004.</figcaption>
       </figure>
 
+      <h3>Comparison with DP-IL</h3>
+      <p>We compare SFBD-RA with DP-IL (Wang et al., 2023), using the same synthetic-noise setting on the aligning task at σ = 0.002. SFBD-RA outperforms DP-IL on every metric. DP-IL needs a well-trained diffusion model, and the small clean set is not enough to train one, which likely explains its low performance. DP-IL is also based on behavior cloning, which is known to average across modes. The policy therefore cannot capture multi-modal behavior, which explains its zero entropy.</p>
+    </div>
+
+    <div class="wrap">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Comparison with DP-IL">
+        <table>
+          <caption>Comparison with DP-IL on the aligning task with noisy demonstrations (σ = 0.002).</caption>
+          <thead>
+            <tr>
+              <th scope="col">Method</th>
+              <th class="group-start" scope="col">SR (%) ↑</th><th scope="col">Error ↓</th><th scope="col">Ent. ↑</th><th scope="col">Time (frames) ↓</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">DP-IL</th>
+              <td class="group-start">37.2 <small>± 3.8</small></td><td>0.227 <small>± 0.024</small></td><td>0.000 <small>± 0.000</small></td><td>230.8 <small>± 13.5</small></td></tr>
+            <tr class="ours"><th scope="row">SFBD-RA</th>
+              <td class="group-start ours"><strong>87.0</strong> <small>± 4.0</small></td><td class="ours"><strong>0.061</strong> <small>± 0.017</small></td><td class="ours"><strong>0.107</strong> <small>± 0.047</small></td><td class="ours"><strong>181.1</strong> <small>± 7.1</small></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="wrap">
+
       <h3>Human demonstrations and transfer learning</h3>
       <p>The original D3IL human demonstrations vary in quality, so we treat them as containing real-world noise. Clustering by path length, jerk and curvature separates a consistent set, from which 10% is sampled as the clean set.</p>
     </div>
@@ -194,18 +220,21 @@
   <section id="real-robot" data-section>
     <div class="wrap">
       <h2>3. Real-robot experiments</h2>
-      <p>A Franka Emika Panda pushes a 3D-printed box with markers on each side to a target pose, tracked by an external camera. Each policy is tested on 10 random start and target poses, twice each, for 20 episodes per policy. SFBD-RA beats the policy trained directly on noisy data in success rate and pose error at both noise levels, even with only 2% clean demonstrations.</p>
-
       <figure>
         <img src="Assets/experiment_setup.jpeg" alt="Physical setup: robot arm, marker box and external camera" loading="lazy" data-placeholder>
         <figcaption>Experimental setup.</figcaption>
       </figure>
+
+      <p>The robot is interfaced with a computer through the Generic Manipulation Driver package (Armer) by QCR.
+        To control the robot, we use Franka position control (Cartesian position mode). The Cartesian position generated
+        by the policy is sent directly to the Franka position controller through the Robot Operating System (ROS).
+        We do not use any additional interpolation or filtering, and the robot constraints are left at their default settings.</p>
     </div>
 
     <div class="wrap">
       <div class="table-scroll" tabindex="0" role="region" aria-label="Real-robot results">
         <table>
-          <caption>Real-robot results, 20 episodes per policy. SFBD-RA is pretrained on 2% or 10% clean demonstrations.</caption>
+          <caption>Real-robot results (mean ± std). SFBD-RA is pretrained on 2% or 10% clean demonstrations. Best result per noise level in bold.</caption>
           <thead>
             <tr>
               <th rowspan="2" scope="col">Metric</th>
@@ -218,21 +247,25 @@
             </tr>
           </thead>
           <tbody>
-            <tr><th scope="row">SR (%)</th>
-              <td class="group-start">45</td><td>20</td><td class="ours">45</td><td class="ours">50</td>
-              <td class="group-start">25</td><td>0</td><td class="ours">20</td><td class="ours">30</td></tr>
-            <tr><th scope="row">Error</th>
-              <td class="group-start">0.53</td><td>0.57</td><td class="ours">0.39</td><td class="ours">0.26</td>
-              <td class="group-start">0.54</td><td>0.60</td><td class="ours">0.28</td><td class="ours">0.46</td></tr>
-            <tr><th scope="row">Ent.</th>
-              <td class="group-start">0.1</td><td>0.0</td><td class="ours">0.0</td><td class="ours">0.1</td>
-              <td class="group-start">0.1</td><td>0.0</td><td class="ours">0.0</td><td class="ours">0.1</td></tr>
-            <tr><th scope="row">Time (s)</th>
-              <td class="group-start">20.98</td><td>26.04</td><td class="ours">29.67</td><td class="ours">34.62</td>
-              <td class="group-start">17.98</td><td>N/A</td><td class="ours">29.68</td><td class="ours">31.72</td></tr>
+            <tr><th scope="row">SR (%) ↑</th>
+              <td class="group-start">43.8 <small>± 6.3</small></td><td>28.8 <small>± 8.5</small></td><td class="ours"><strong>58.8</strong> <small>± 19.3</small></td><td class="ours">50.0 <small>± 10.8</small></td>
+              <td class="group-start">33.8 <small>± 8.5</small></td><td>5.0 <small>± 4.1</small></td><td class="ours">41.3 <small>± 17.0</small></td><td class="ours"><strong>43.8</strong> <small>± 18.0</small></td></tr>
+            <tr><th scope="row">Error ↓</th>
+              <td class="group-start">0.54 <small>± 0.05</small></td><td>0.50 <small>± 0.10</small></td><td class="ours"><strong>0.41</strong> <small>± 0.16</small></td><td class="ours"><strong>0.41</strong> <small>± 0.20</small></td>
+              <td class="group-start">0.45 <small>± 0.07</small></td><td>0.58 <small>± 0.03</small></td><td class="ours"><strong>0.23</strong> <small>± 0.10</small></td><td class="ours">0.34 <small>± 0.10</small></td></tr>
+            <tr><th scope="row">Ent. ↑</th>
+              <td class="group-start">0.17 <small>± 0.09</small></td><td>0.14 <small>± 0.11</small></td><td class="ours">0.22 <small>± 0.17</small></td><td class="ours"><strong>0.35</strong> <small>± 0.19</small></td>
+              <td class="group-start">0.20 <small>± 0.12</small></td><td>0.05 <small>± 0.04</small></td><td class="ours"><strong>0.21</strong> <small>± 0.15</small></td><td class="ours">0.19 <small>± 0.06</small></td></tr>
+            <tr><th scope="row">Time (s) ↓</th>
+              <td class="group-start">24.7 <small>± 3.2</small></td><td>23.0 <small>± 2.7</small></td><td class="ours"><strong>21.5</strong> <small>± 5.6</small></td><td class="ours">29.4 <small>± 5.0</small></td>
+              <td class="group-start"><strong>25.6</strong> <small>± 6.5</small></td><td>30.7 <small>± 9.7</small></td><td class="ours">28.2 <small>± 2.0</small></td><td class="ours">33.4 <small>± 6.1</small></td></tr>
           </tbody>
         </table>
       </div>
+      <p>A Franka Emika Panda pushes a 3D-printed box with markers on each side to a target pose, tracked by an external camera.
+        Each policy is tested on 10 random start and target poses, twice each, for 20 episodes per policy. We repeat the experiment four times, resulting in 640 episodes in total.
+        SFBD-RA beats the policy trained directly on noisy data in success rate and pose error at both noise levels,
+        even with only 2% clean demonstrations.</p>
     </div>
   </section>
 
@@ -240,7 +273,8 @@
   <section id="ablation" class="soft" data-section>
     <div class="wrap">
       <h2>4. Sensitivity to dataset size</h2>
-      <p>The 1000 human demonstrations for aligning are split into a consistent cluster (638) and an inconsistent cluster (362). Starting from all inconsistent demonstrations, we add consistent ones to reach 600 and 800 in total. SFBD-RA improves the success rate at every size.</p>
+      <p>The 1000 human demonstrations for the aligning task are split into a consistent cluster (638) and an inconsistent cluster (362). As baselines, we train on the inconsistent cluster alone and on 362 randomly sampled consistent demonstrations. We then keep all 362 inconsistent demonstrations and add consistent ones to reach 600 and 800 in total. The consistent set is trained with a vanilla diffusion policy (Base) only; every other set is trained with both Base and SFBD-RA.</p>
+      <p>SFBD-RA improves the success rate at every dataset size, and lowers the pose error on both mixed datasets. Unlike in the simulation results above, it also shortens the completion time. This is likely because each strategy is equally represented in these datasets, whereas the earlier datasets are imbalanced, which may bias the policy and lengthen completion time. Overall, the benefits of SFBD-RA hold across dataset sizes.</p>
     </div>
     <div class="wrap">
       <div class="table-scroll" tabindex="0" role="region" aria-label="Ablation on dataset size">
@@ -289,18 +323,19 @@
   <section id="analysis" data-section>
     <div class="wrap">
       <h2>5. Additional analysis</h2>
-      <p>TBA.</p>
+      <p>We answer four further questions about SFBD-RA. The first three concern the clean subset: whether clustering identifies demonstration quality, whether it discards legitimate strategy variation, and how much the choice of subset matters. The last examines the remaining gap between SFBD-RA and the clean-data baseline.</p>
       <nav class="analysis-index" aria-label="Analyses in this section">
-        <a href="#analysis-a"><span>A</span>Clean/noisy clustering analysis</a>
-        <a href="#analysis-b"><span>B</span>Sensitivity to the quality of the pretraining dataset analysis</a>
-        <a href="#analysis-c"><span>C</span>Transfer learning versus fine-tuning analysis</a>
+        <a href="#analysis-a"><span>A</span>Does clustering establish demonstration quality?</a>
+        <a href="#analysis-b"><span>B</span>Does K-means clustering conflate legitimate variation in demonstration strategies with noise?</a>
+        <a href="#analysis-c"><span>C</span>Are the results sensitive to the choice of subset?</a>
+        <a href="#analysis-d"><span>D</span>How close is SFBD-RA to the clean-data baseline?</a>
       </nav>
 
       <!-- ---- Analysis A ---- -->
       <article class="analysis" id="analysis-a">
         <p class="analysis-label">Analysis A</p>
-        <h3>Clean/noisy clustering analysis</h3>
-        <p>How well does clustering pick out the clean demonstrations? We mix clean human demonstrations with synthetic noisy ones at three noise levels (σ = 0.0001, 0.0005, 0.002) and four clean ratios (20–80%), then separate them with K-means and with a Gaussian mixture model (GMM). Each setting is averaged over five resamples.</p>
+        <h3>Does clustering establish demonstration quality?</h3>
+        <p><b>Short answer: yes, for the noise considered in this work.</b> We mix clean demonstrations with noise-injected ones at four noise levels (σ = 0.0001 to 0.004) and four clean ratios (20–80%), then separate them with K-means and with a Gaussian mixture model (GMM). The identified clean subset is scored against the ground-truth labels. Each setting is averaged over five resamples.</p>
         <div class="table-scroll" id="table-a1" tabindex="0" role="region" aria-label="Clean-subset identification">
           <table>
             <caption><b>Table A1.</b> Clean-subset identification (%). Precision: share of demonstrations labelled clean that are truly clean. Recall: share of truly clean demonstrations that are found.</caption>
@@ -317,116 +352,202 @@
               </tr>
             </thead>
             <tbody>
+              <tr class="group-row"><th scope="rowgroup" rowspan="4">0.004</th><td>20</td>
+                <td class="group-start">38.2 <small>± 1.1</small></td><td>100.0 <small>± 0.0</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>95.1 <small>± 3.1</small></td></tr>
+              <tr><td>40</td>
+                <td class="group-start">67.1 <small>± 1.1</small></td><td>99.4 <small>± 0.5</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>95.8 <small>± 1.9</small></td></tr>
+              <tr><td>60</td>
+                <td class="group-start">84.1 <small>± 0.6</small></td><td>99.0 <small>± 0.3</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>93.3 <small>± 1.1</small></td></tr>
+              <tr><td>80</td>
+                <td class="group-start">94.4 <small>± 1.2</small></td><td>99.0 <small>± 0.2</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>94.3 <small>± 0.6</small></td></tr>
               <tr class="group-row"><th scope="rowgroup" rowspan="4">0.002</th><td>20</td>
-                <td class="group-start">29.6 <small>± 1.1</small></td><td>100.0 <small>± 0.0</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.5 <small>± 0.5</small></td></tr>
+                <td class="group-start">28.3 <small>± 1.1</small></td><td>95.5 <small>± 2.3</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.5 <small>± 0.3</small></td></tr>
               <tr><td>40</td>
-                <td class="group-start">56.6 <small>± 1.5</small></td><td>99.5 <small>± 0.4</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.6 <small>± 0.3</small></td></tr>
+                <td class="group-start">53.7 <small>± 1.3</small></td><td>92.2 <small>± 1.5</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.9 <small>± 0.2</small></td></tr>
               <tr><td>60</td>
-                <td class="group-start">76.5 <small>± 1.6</small></td><td>99.6 <small>± 0.2</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.8 <small>± 0.2</small></td></tr>
+                <td class="group-start">74.5 <small>± 2.2</small></td><td>92.2 <small>± 0.4</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>100.0 <small>± 0.1</small></td></tr>
               <tr><td>80</td>
-                <td class="group-start">90.7 <small>± 0.9</small></td><td>100.0 <small>± 0.1</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.8 <small>± 0.1</small></td></tr>
+                <td class="group-start">90.1 <small>± 1.1</small></td><td>88.6 <small>± 1.2</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>98.7 <small>± 1.8</small></td></tr>
               <tr class="group-row"><th scope="rowgroup" rowspan="4">0.0005</th><td>20</td>
-                <td class="group-start">26.4 <small>± 0.2</small></td><td>98.5 <small>± 0.9</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.2 <small>± 0.8</small></td></tr>
+                <td class="group-start">23.7 <small>± 0.5</small></td><td>88.6 <small>± 1.6</small></td><td class="group-start">13.6 <small>± 2.1</small></td><td>49.6 <small>± 10.4</small></td></tr>
               <tr><td>40</td>
-                <td class="group-start">50.0 <small>± 0.9</small></td><td>98.6 <small>± 0.8</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.4 <small>± 0.4</small></td></tr>
+                <td class="group-start">45.3 <small>± 0.8</small></td><td>84.6 <small>± 2.5</small></td><td class="group-start">99.7 <small>± 0.3</small></td><td>99.4 <small>± 0.6</small></td></tr>
               <tr><td>60</td>
-                <td class="group-start">71.0 <small>± 0.8</small></td><td>98.4 <small>± 0.9</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.5 <small>± 0.2</small></td></tr>
+                <td class="group-start">66.6 <small>± 0.7</small></td><td>83.5 <small>± 2.8</small></td><td class="group-start">99.3 <small>± 0.4</small></td><td>99.7 <small>± 0.2</small></td></tr>
               <tr><td>80</td>
-                <td class="group-start">87.6 <small>± 1.2</small></td><td>98.4 <small>± 0.6</small></td><td class="group-start">100.0 <small>± 0.0</small></td><td>99.8 <small>± 0.1</small></td></tr>
+                <td class="group-start">84.6 <small>± 1.4</small></td><td>78.9 <small>± 1.8</small></td><td class="group-start">99.7 <small>± 0.2</small></td><td>82.6 <small>± 2.5</small></td></tr>
               <tr class="group-row"><th scope="rowgroup" rowspan="4">0.0001</th><td>20</td>
-                <td class="group-start">26.2 <small>± 0.4</small></td><td>95.0 <small>± 1.5</small></td><td class="group-start">47.6 <small>± 5.0</small></td><td>99.4 <small>± 0.4</small></td></tr>
+                <td class="group-start">21.9 <small>± 0.7</small></td><td>77.5 <small>± 2.0</small></td><td class="group-start">19.6 <small>± 1.2</small></td><td>63.6 <small>± 5.3</small></td></tr>
               <tr><td>40</td>
-                <td class="group-start">49.9 <small>± 0.8</small></td><td>95.6 <small>± 1.1</small></td><td class="group-start">73.8 <small>± 3.5</small></td><td>99.7 <small>± 0.2</small></td></tr>
+                <td class="group-start">42.6 <small>± 1.1</small></td><td>76.5 <small>± 2.3</small></td><td class="group-start">40.1 <small>± 1.6</small></td><td>70.1 <small>± 7.7</small></td></tr>
               <tr><td>60</td>
-                <td class="group-start">69.8 <small>± 0.4</small></td><td>96.2 <small>± 0.6</small></td><td class="group-start">89.8 <small>± 2.3</small></td><td>99.3 <small>± 0.5</small></td></tr>
+                <td class="group-start">62.8 <small>± 0.7</small></td><td>77.8 <small>± 3.2</small></td><td class="group-start">62.4 <small>± 1.7</small></td><td>72.6 <small>± 7.1</small></td></tr>
               <tr><td>80</td>
-                <td class="group-start">87.7 <small>± 0.7</small></td><td>87.8 <small>± 5.4</small></td><td class="group-start">95.9 <small>± 0.9</small></td><td>98.8 <small>± 0.3</small></td></tr>
+                <td class="group-start">82.4 <small>± 1.0</small></td><td>74.2 <small>± 2.0</small></td><td class="group-start">83.8 <small>± 0.9</small></td><td>68.8 <small>± 4.3</small></td></tr>
             </tbody>
           </table>
         </div>
-        <p>As shown in <a href="#table-a1">Table A1</a>, both methods find almost all clean demonstrations (high recall). The difference is precision: GMM labels no noisy demonstration as clean at σ = 0.002 and 0.0005, while K-means precision drops as the share of noisy demonstrations grows. Two reasons are likely. K-means assumes spherical clusters of equal spread, but the noisy demonstrations spread out more widely on the three clustering metrics (path length, jerk, curvature) and can overlap the clean cluster (<a href="#table-a2">Table A2</a>); GMM makes no such assumption. And because noise injection is stochastic, some demonstrations labelled noisy are in fact close to clean, so counting them as clean is harmless for training.</p>
-        <div class="table-scroll" id="table-a2" tabindex="0" role="region" aria-label="Spread of the clustering metrics">
+        <p>As shown in <a href="#table-a1">Table A1</a>, K-means finds most clean demonstrations (high recall), but its precision drops as the share of noisy demonstrations grows. GMM has perfect precision at σ = 0.004 and 0.002, and near-perfect precision at σ = 0.0005 unless only 20% of the data is clean. One likely reason: K-means assumes spherical clusters of equal spread, but noisy demonstrations spread more widely on the three clustering metrics (jerk, path length, curvature) and can overlap the clean cluster (<a href="#table-a2">Table A2</a>); GMM makes no such assumption. At σ = 0.0001 the noise barely changes these metrics, so neither method separates the two groups well..</p>
+        <div class="table-scroll" id="table-a2" tabindex="0" role="region" aria-label="Clustering metrics of clean and noisy demonstrations">
           <table>
-            <caption><b>Table A2.</b> Spread (mean ± standard deviation) of the three clustering metrics for clean and noise-injected demonstrations at each noise level.</caption>
+            <caption><b>Table A2.</b> Clustering metrics (mean ± standard deviation) of the clean and noisy demonstrations in the mixed datasets.</caption>
             <thead>
               <tr>
-                <th rowspan="2" scope="col">Metric</th>
-                <th rowspan="2" class="group-start" scope="col">Clean</th>
-                <th colspan="3" class="group-start" scope="colgroup">Noisy, noise σ</th>
+                <th rowspan="2" scope="col">Noise σ</th>
+                <th rowspan="2" scope="col">Clean (%)</th>
+                <th colspan="2" class="group-start" scope="colgroup">Jerk (×10<sup>−3</sup>)</th>
+                <th colspan="2" class="group-start" scope="colgroup">Path length (×10<sup>−3</sup>)</th>
+                <th colspan="2" class="group-start" scope="colgroup">Curvature (×10<sup>3</sup>)</th>
               </tr>
               <tr>
-                <th class="group-start">0.002</th><th>0.0005</th><th>0.0001</th>
+                <th class="group-start">Clean</th><th>Noisy</th>
+                <th class="group-start">Clean</th><th>Noisy</th>
+                <th class="group-start">Clean</th><th>Noisy</th>
               </tr>
             </thead>
             <tbody>
-              <tr><th scope="row">Jerk (×10<sup>−3</sup>)</th>
-                <td class="group-start">4.15 <small>± 1.30</small></td><td class="group-start">13.08 <small>± 6.09</small></td><td>8.11 <small>± 4.32</small></td><td>7.61 <small>± 4.24</small></td></tr>
-              <tr><th scope="row">Path length (×10<sup>−3</sup>)</th>
-                <td class="group-start">10.13 <small>± 2.00</small></td><td class="group-start">11.68 <small>± 3.22</small></td><td>10.11 <small>± 2.72</small></td><td>9.91 <small>± 2.53</small></td></tr>
-              <tr><th scope="row">Curvature (×10<sup>3</sup>)</th>
-                <td class="group-start">1.16 <small>± 0.51</small></td><td class="group-start">12.44 <small>± 5.29</small></td><td>6.04 <small>± 2.80</small></td><td>2.83 <small>± 1.41</small></td></tr>
+              <tr class="group-row"><th scope="row">0.004</th><td>20</td>
+                <td class="group-start">7.50 <small>± 4.19</small></td><td>31.21 <small>± 11.24</small></td><td class="group-start">9.69 <small>± 2.37</small></td><td>17.51 <small>± 5.06</small></td><td class="group-start">2.15 <small>± 1.13</small></td><td>17.49 <small>± 6.17</small></td></tr>
+              <tr class="group-row"><th scope="row">0.0001</th><td>20</td>
+                <td class="group-start">7.50 <small>± 4.19</small></td><td>7.60 <small>± 4.23</small></td><td class="group-start">9.69 <small>± 2.37</small></td><td>9.90 <small>± 2.52</small></td><td class="group-start">2.15 <small>± 1.13</small></td><td>2.83 <small>± 1.40</small></td></tr>
             </tbody>
           </table>
         </div>
-        <p class="takeaway"><b>Takeaway:</b> GMM separates clean from noisy demonstrations almost perfectly unless the noise is very small (σ = 0.0001), where the two are hard to tell apart; K-means finds the clean set but also admits many noisy demonstrations.</p>
+        <p class="takeaway"><b>Takeaway:</b> GMM separates clean from noisy demonstrations almost perfectly unless the noise is very small, while K-means finds the clean set but also admits noisy demonstrations. We therefore recommend GMM.</p>
       </article>
 
       <!-- ---- Analysis B ---- -->
       <article class="analysis" id="analysis-b">
         <p class="analysis-label">Analysis B</p>
-        <h3>Title of second analysis</h3>
-        <p>Describe the question this analysis answers and how you set it up (task, noise level, number of seeds).</p>
-        <div class="table-scroll" tabindex="0" role="region" aria-label="Title of second analysis">
+        <h3>Does K-means clustering conflate legitimate variation in demonstration strategies with noise?</h3>
+        <p><b>Short answer: no, for the noise considered in this work.</b> The aligning task can be solved with two strategies, pushing the box from inside or from outside. We cluster the 1000 human demonstrations with K-means and with GMM, then count how many demonstrations of each strategy end up in the high- and low-quality clusters.</p>
+        <p>The two methods largely agree (<a href="#table-b1">Table B1</a>): they give the same label to 86.4% of demonstrations, and only 7 of the 638 K-means clean demonstrations are labelled noisy by GMM. GMM is more permissive, labelling 760 demonstrations as clean.</p>
+        <div class="table-scroll" id="table-b1" tabindex="0" role="region" aria-label="Agreement between K-means and GMM">
           <table>
-            <caption>Table caption: what is compared and under which setting.</caption>
+            <caption><b>Table B1.</b> Agreement between K-means and GMM on the 1000 human aligning demonstrations.</caption>
             <thead>
               <tr>
-                <th scope="col">Setting</th>
-                <th class="group-start">Noisy</th>
-                <th>Clean</th>
-                <th class="ours">SFBD-RA</th>
+                <th scope="col">Method</th>
+                <th class="group-start" scope="col">Labelled clean</th><th scope="col">Labelled noisy</th>
+                <th scope="col">Clean here, noisy in the other</th>
+                <th class="group-start" scope="col">Same label</th><th scope="col">Jaccard</th>
               </tr>
             </thead>
             <tbody>
-              <tr><th scope="row">Row 1</th>
-                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
-              <tr><th scope="row">Row 2</th>
-                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
-              <tr><th scope="row">Row 3</th>
-                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+              <tr><th scope="row">K-means</th><td class="group-start">638</td><td>362</td><td>7</td>
+                <td class="group-start" rowspan="2">864 (86.4%)</td><td rowspan="2">0.82</td></tr>
+              <tr><th scope="row">GMM</th><td class="group-start">760</td><td>240</td><td>129</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="takeaway"><b>Takeaway:</b> one sentence on what the reader should conclude.</p>
+        <p>The original dataset is split evenly between the two strategies (<a href="#table-b2">Table B2</a>). With either method, the high-quality cluster keeps both strategies, but inside demonstrations make up about two thirds of it, while the low-quality cluster is mostly outside demonstrations.</p>
+        <div class="table-scroll" id="table-b2" tabindex="0" role="region" aria-label="Strategy composition of the quality clusters">
+          <table>
+            <caption><b>Table B2.</b> Strategy composition of the human aligning demonstrations and of the quality clusters found by K-means and GMM (jerk, path length, curvature).</caption>
+            <thead>
+              <tr>
+                <th scope="col">Dataset</th>
+                <th class="group-start" scope="col">Inside</th><th scope="col">Outside</th><th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Original dataset</th><td class="group-start">500 <small>(50.0%)</small></td><td>500 <small>(50.0%)</small></td><td>1000</td></tr>
+              <tr class="group-row"><th scope="row">K-means, high quality</th><td class="group-start">426 <small>(66.8%)</small></td><td>212 <small>(33.2%)</small></td><td>638</td></tr>
+              <tr><th scope="row">K-means, low quality</th><td class="group-start">74 <small>(20.4%)</small></td><td>288 <small>(79.6%)</small></td><td>362</td></tr>
+              <tr class="group-row"><th scope="row">GMM, high quality</th><td class="group-start">474 <small>(62.4%)</small></td><td>286 <small>(37.6%)</small></td><td>760</td></tr>
+              <tr><th scope="row">GMM, low quality</th><td class="group-start">26 <small>(10.8%)</small></td><td>214 <small>(89.2%)</small></td><td>240</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> Both strategies remain in the clean subset, so clustering does not discard legitimate strategy variation, although the inside strategy is overrepresented.</p>
       </article>
 
       <!-- ---- Analysis C ---- -->
       <article class="analysis" id="analysis-c">
         <p class="analysis-label">Analysis C</p>
-        <h3>Title of third analysis</h3>
-        <p>Describe the question this analysis answers and how you set it up (task, noise level, number of seeds).</p>
-        <div class="table-scroll" tabindex="0" role="region" aria-label="Title of third analysis">
+        <h3>Are the results sensitive to the choice of subset?</h3>
+        <p><b>Short answer: not significantly.</b> On the aligning task with human demonstrations, we pretrain SFBD-RA on three subsets: the best (highest motion quality), the worst (lowest motion quality), and a random sample. We compare the final policies after five iterations against a diffusion policy trained on all demonstrations.</p>
+        <div class="table-scroll" id="table-c1" tabindex="0" role="region" aria-label="SFBD-RA with different pretraining subsets">
           <table>
-            <caption>Table caption: what is compared and under which setting.</caption>
+            <caption><b>Table C1.</b> SFBD-RA on human demonstrations with different clean pretraining subsets.</caption>
             <thead>
               <tr>
-                <th scope="col">Setting</th>
-                <th class="group-start">Noisy</th>
-                <th>Clean</th>
-                <th class="ours">SFBD-RA</th>
+                <th scope="col">Policy</th><th scope="col">Iter.</th>
+                <th class="group-start" scope="col">SR (%) ↑</th><th scope="col">Error ↓</th><th scope="col">Ent. ↑</th><th scope="col">Time (frames) ↓</th>
               </tr>
             </thead>
             <tbody>
-              <tr><th scope="row">Row 1</th>
-                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
-              <tr><th scope="row">Row 2</th>
-                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
-              <tr><th scope="row">Row 3</th>
-                <td class="group-start">0.00 <small>± 0.00</small></td><td>0.00 <small>± 0.00</small></td><td class="ours">0.00 <small>± 0.00</small></td></tr>
+              <tr><th scope="row">Diffusion Policy</th><td>–</td><td class="group-start">80.0 <small>± 5.6</small></td><td>0.053 <small>± 0.004</small></td><td>0.26 <small>± 0.03</small></td><td>165.3 <small>± 3.6</small></td></tr>
+              <tr><th scope="row">SFBD-RA (best subset)</th><td>5</td><td class="group-start ours">85.0 <small>± 2.0</small></td><td class="ours">0.060 <small>± 0.003</small></td><td class="ours">0.25 <small>± 0.04</small></td><td class="ours">171.5 <small>± 7.7</small></td></tr>
+              <tr><th scope="row">SFBD-RA (worst subset)</th><td>5</td><td class="group-start ours">86.0 <small>± 2.6</small></td><td class="ours">0.063 <small>± 0.003</small></td><td class="ours">0.33 <small>± 0.05</small></td><td class="ours">172.0 <small>± 7.4</small></td></tr>
+              <tr><th scope="row">SFBD-RA (random subset)</th><td>5</td><td class="group-start ours">80.0 <small>± 3.5</small></td><td class="ours">0.089 <small>± 0.015</small></td><td class="ours">0.25 <small>± 0.03</small></td><td class="ours">174.4 <small>± 10.7</small></td></tr>
             </tbody>
           </table>
         </div>
-        <p class="takeaway"><b>Takeaway:</b> one sentence on what the reader should conclude.</p>
+        <p>Pretraining on the best and worst subsets gives similar success rate, pose error and completion time (<a href="#table-c1">Table C1</a>). The random subset matches the diffusion policy's success rate but has a higher pose error. On synthetic noise at σ = 0.004, pretraining on the best subset reaches a higher success rate in each of the first five iterations, and the worst subset catches up by iteration 6 (<a href="#table-c2">Table C2</a>).</p>
+        <div class="table-scroll" id="table-c2" tabindex="0" role="region" aria-label="Success rate per iteration by pretraining subset">
+          <table>
+            <caption><b>Table C2.</b> SFBD-RA success rate (%) per iteration on the noisy σ = 0.004 dataset, pretrained on the best or the worst subset of the same size.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Pretraining</th>
+                <th class="group-start" scope="col">Iter. 1</th><th scope="col">Iter. 2</th><th scope="col">Iter. 3</th><th scope="col">Iter. 4</th><th scope="col">Iter. 5</th><th scope="col">Iter. 6</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Best subset</th><td class="group-start"><strong>65.8</strong> <small>± 4.4</small></td><td><strong>73.0</strong> <small>± 5.2</small></td><td><strong>73.8</strong> <small>± 2.6</small></td><td><strong>78.2</strong> <small>± 1.9</small></td><td><strong>78.2</strong> <small>± 6.3</small></td><td>75.8 <small>± 3.3</small></td></tr>
+              <tr><th scope="row">Worst subset</th><td class="group-start">62.8 <small>± 5.6</small></td><td>68.4 <small>± 2.4</small></td><td>70.8 <small>± 5.4</small></td><td>74.6 <small>± 2.9</small></td><td>76.0 <small>± 3.2</small></td><td><strong>78.6</strong> <small>± 1.8</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> SFBD-RA is robust to the choice of clean subset, so misidentifying it has limited impact on the final policy. At the higher noise level (σ = 0.004), a high-quality subset makes the success rate converge slightly faster.</p>
+      </article>
+
+      <!-- ---- Analysis D ---- -->
+      <article class="analysis" id="analysis-d">
+        <p class="analysis-label">Analysis D</p>
+        <h3>How close is SFBD-RA to the clean-data baseline?</h3>
+        <p><b>Short answer: close in success rate and pose error, but not in completion time and diversity.</b> In both simulation and physical experiments, SFBD-RA still differs from the clean baseline in completion time and behavioral diversity. These differences relate to the two strategies (inside and outside push) present in the demonstrations.</p>
+        <p><a href="#table-d1">Table D1</a> gives, for each of the three training datasets, the share and average completion time of each strategy, followed by the rollout statistics of the policy trained on it. The synthetic datasets are imbalanced: generation keeps successful trajectories until 1000 are collected, without balancing the strategies, and the generating policy uses the outside push more often as noise increases. This creates a state-distribution mismatch with the expert data. The learned policy, however, does not inherit this imbalance. SFBD-RA attempts both strategies about equally (44% / 56% inside / outside at σ = 0.002, 51% / 49% at σ = 0.004), but succeeds mostly with the inside push (67% and 65% of successful rollouts), since the outside push fails more often. Because the inside push is the faster strategy, this does not explain the longer completion time.</p>
+        <div class="table-scroll" id="table-d1" tabindex="0" role="region" aria-label="Strategy proportion and completion time">
+          <table>
+            <caption><b>Table D1.</b> Strategy proportion and completion time (frames) for each dataset and the policy trained on it. Att.: share of attempts using the strategy. Succ.: share of successful rollouts using it. For datasets, proportions are over all 1000 demonstrations; for policies, over successful rollouts in 100 episodes, averaged over 5 runs.</caption>
+            <thead>
+              <tr>
+                <th rowspan="2" scope="col">Group</th>
+                <th rowspan="2" scope="col">Source</th>
+                <th colspan="3" class="group-start" scope="colgroup">Inside</th>
+                <th colspan="3" class="group-start" scope="colgroup">Outside</th>
+                <th rowspan="2" class="group-start" scope="col">Overall time</th>
+              </tr>
+              <tr>
+                <th class="group-start">Att.</th><th>Succ.</th><th>Time</th>
+                <th class="group-start">Att.</th><th>Succ.</th><th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="group-row"><th scope="rowgroup" rowspan="2">Human</th><td>Dataset</td>
+                <td class="group-start">–</td><td>50%</td><td>137 <small>± 25</small></td><td class="group-start">–</td><td>50%</td><td>166 <small>± 32</small></td><td class="group-start">152 <small>± 32</small></td></tr>
+              <tr><td>Diffusion Policy</td>
+                <td class="group-start">48%</td><td>52%</td><td>155 <small>± 42</small></td><td class="group-start">52%</td><td>48%</td><td>194 <small>± 55</small></td><td class="group-start">171 <small>± 52</small></td></tr>
+              <tr class="group-row"><th scope="rowgroup" rowspan="2">σ = 0.002</th><td>Dataset</td>
+                <td class="group-start">–</td><td>46%</td><td>163 <small>± 48</small></td><td class="group-start">–</td><td>54%</td><td>209 <small>± 59</small></td><td class="group-start">188 <small>± 59</small></td></tr>
+              <tr><td>SFBD-RA</td>
+                <td class="group-start ours">44%</td><td class="ours">67%</td><td class="ours">173 <small>± 52</small></td><td class="group-start ours">56%</td><td class="ours">33%</td><td class="ours">228 <small>± 68</small></td><td class="group-start ours">179 <small>± 56</small></td></tr>
+              <tr class="group-row"><th scope="rowgroup" rowspan="2">σ = 0.004</th><td>Dataset</td>
+                <td class="group-start">–</td><td>27%</td><td>198 <small>± 67</small></td><td class="group-start">–</td><td>73%</td><td>244 <small>± 67</small></td><td class="group-start">232 <small>± 70</small></td></tr>
+              <tr><td>SFBD-RA</td>
+                <td class="group-start ours">51%</td><td class="ours">65%</td><td class="ours">209 <small>± 71</small></td><td class="group-start ours">49%</td><td class="ours">35%</td><td class="ours">239 <small>± 76</small></td><td class="group-start ours">215 <small>± 73</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>We attribute the completion-time gap to three factors:</p>
+        <ol>
+          <li><b>A slower generating policy.</b> The noisy datasets add noise to the actions of a diffusion policy trained on human demonstrations, so the underlying actions are those of that policy, which is itself slower than the human demonstrations (155 vs. 137 frames inside, 194 vs. 166 outside).</li>
+          <li><b>Sparser coverage of expert states.</b> SFBD-RA denoises actions conditioned on observations, but does not change the observations in the dataset. Noisy rollouts visit perturbed states the expert rarely encounters, so with a finite dataset (1000 trajectories), states the expert visits are covered less densely than in the human dataset. This weakens Assumptions 2 and 3 of the paper in practice, and consistent with this, the gap grows with the noise level.</li>
+          <li><b>Closed-loop error accumulation.</b> Our theoretical guarantee concerns the action distribution at each observation, whereas completion time is a closed-loop quantity in which small per-step errors accumulate over a trajectory.</li>
+        </ol>
+        <p class="takeaway"><b>Takeaway:</b> SFBD-RA matches the clean baseline in success rate and pose error but not fully in completion time and diversity. The time gap comes from the slower generating policy, sparser coverage of expert states in the noisy data, and per-step errors accumulating over a trajectory, not from strategy imbalance.</p>
       </article>
     </div>
   </section>
