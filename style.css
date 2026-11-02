@@ -56,7 +56,7 @@ a { color: var(--blue-dark); }
   backdrop-filter: blur(14px);
 }
 .brand { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); text-decoration: none; font-size: 0.95rem; font-weight: 760; }
-.brand-mark { width: 22px; height: 22px; fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round; }
+.brand-mark { width: 34px; height: 34px; border-radius: 6px; object-fit: contain; }
 .site-nav { display: flex; align-items: center; gap: 6px; }
 .site-nav a, .nav-toggle {
   border: 0;

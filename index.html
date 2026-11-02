@@ -8,7 +8,7 @@
 <!-- Keeps the page out of search engines while under review. Remove after acceptance. -->
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M3 24 C10 24 12 8 29 8' fill='none' stroke='%232e8b57' stroke-width='4' stroke-linecap='round'/></svg>">
+<link rel="icon" type="image/png" href="Assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet"> -->
@@ -21,7 +21,7 @@
 <!-- ============ TOP BAR: sticky navigation ============ -->
 <header class="topbar">
   <a class="brand" href="#top">
-    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24 C10 24 12 8 29 8"/></svg>
+    <img class="brand-mark" src="Assets/logo.png" alt="">
     SFBD-RA
   </a>
   <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
@@ -52,7 +52,20 @@
 
     <div class="summary" id="abstract">
       <p class="kicker">Abstract</p>
-      <p>Diffusion policy is a state-of-the-art approach for robot action generation conditioned on observations. However, to train the policy, existing methods typically assume access to clean expert demonstrations, which limits their applicability when clean expert data are scarce. To overcome this limitation, we adapt a deconvolution-based method from the image generation domain to robotic policy learning. The resulting framework achieves performance comparable to a model trained on an entirely clean dataset, while requiring as little as 2% of the demonstrations to be clean. We further demonstrate that clean demonstrations from related tasks can be leveraged through transfer learning to improve performance on the target task. The proposed approach is validated in both simulations and real-world experiments, where it achieves success rates and completion time comparable to the clean expert data baseline.</p>
+      <p>Diffusion policy is a state-of-the-art approach for
+        robot action generation conditioned on observations. However,
+        to train the policy, existing methods typically assume access
+        to clean expert demonstrations, which limits their applicability
+        when clean expert data are scarce. To overcome this limitation,
+        we adapt a deconvolution-based method from the image gener-
+        ation domain to robotic policy learning. In simulation and real-
+        world experiments with synthetically corrupted demonstrations,
+        the resulting framework achieves a success rate and task
+        accuracy comparable to a model trained on an entirely clean
+        dataset, while requiring as little as 2% of the demonstrations
+        to be clean. We further demonstrate that clean demonstrations
+        from related tasks can be leveraged through transfer learning
+        to improve performance on the target task.</p>
     </div>
   </div>
 </header>
